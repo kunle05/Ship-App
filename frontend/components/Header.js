@@ -37,7 +37,7 @@ const StyledHeader = styled.header`
     }
 `;
 
-const Logo = styled.h2`
+export const Logo = styled.h2`
     font-size: 4rem;
     transform: skew(-8deg);
     a {
@@ -46,6 +46,9 @@ const Logo = styled.h2`
         text-decoration: none;
         text-transform: uppercase;
         padding: 0.5rem 1rem;
+        :hover {
+            color: white !important;
+        }
     }
     @media (max-width: 992px) {
         font-size: revert;

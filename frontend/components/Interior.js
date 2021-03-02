@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Col, Container, Row } from "reactstrap"
+import { Col, Container, Row } from "reactstrap";
 import InnerContent from "./styles/InnerContent";
 
 const Interior = props => {

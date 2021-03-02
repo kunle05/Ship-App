@@ -34,9 +34,13 @@ const GlobalStyles = createGlobalStyle`
         margin: 0;
         font-size: 2rem;
         line-height: 1.5;
-        p {
-            margin-bottom: 3rem;
-        }
+    }
+    a {
+        text-decoration: none;
+        color: var(--black);
+    }
+    p {
+        margin-bottom: 3rem;
     }
 `;
 
