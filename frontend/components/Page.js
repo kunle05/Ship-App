@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from "styled-components";
 import Header from "./Header";
+import Meta from "./Meta";
 
 const GlobalStyles = createGlobalStyle`
     @font-face {
@@ -33,6 +34,9 @@ const GlobalStyles = createGlobalStyle`
         margin: 0;
         font-size: 2rem;
         line-height: 1.5;
+        p {
+            margin-bottom: 3rem;
+        }
     }
 `;
 
@@ -46,6 +50,7 @@ const Page = props => {
     return (
         <div>
             <GlobalStyles />
+            <Meta />
             <Header />
             <div className="content">
                 {props.children}

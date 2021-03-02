@@ -37,7 +37,7 @@ const StyledHeader = styled.header`
     }
 `;
 
-const Logo = styled.h1`
+const Logo = styled.h2`
     font-size: 4rem;
     transform: skew(-8deg);
     a {

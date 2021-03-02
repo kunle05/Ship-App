@@ -1,9 +1,15 @@
 import MainContent from '../components/MainContent';
+import Interior from '../components/Interior';
+import Footer from '../components/Footer';
 
 const Home = () => {
   return (
-      <MainContent />
-      // <p>We are here</p>
+      <>
+        <MainContent />
+        <Interior />
+        <Interior right="true" />
+        <Footer />
+      </>
   );
 };
 
