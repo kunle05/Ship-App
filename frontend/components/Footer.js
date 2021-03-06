@@ -50,7 +50,7 @@ const Footer = () => {
                             <div>
                                 <ListGroup flush>
                                     <ListGroupItem>
-                                        <Link href="/">
+                                        <Link href="/locations">
                                             <a>
                                                 <FontAwesomeIcon icon="globe-africa" />
                                                 See Locations
@@ -64,6 +64,11 @@ const Footer = () => {
                     <Col sm="12">
                         <Row>
                             <div>
+                                <Link href="/">
+                                    <a>
+                                        <FontAwesomeIcon icon="envelope" /> 
+                                    </a>
+                                </Link>
                                 <Link href="/">
                                     <a>
                                         <FontAwesomeIcon icon={['fab', 'facebook']} /> 
@@ -80,7 +85,7 @@ const Footer = () => {
                                     </a>
                                 </Link>
                             </div>
-                            <p><a href="https://kunleyusuf.com" target="_blank">&copy;</a> 2021 K-Kodes Solutions</p>
+                            <p><a href="https://kunleyusuf.com" target="_blank">&copy;</a> {new Date().getFullYear()} K-Kodes Solutions</p>
                         </Row>
                     </Col>
                 </Row>

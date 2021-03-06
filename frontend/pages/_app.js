@@ -1,24 +1,37 @@
 import Page from "../components/Page"
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import withData from '../data';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { faGlobeAfrica, faCopyright } from '@fortawesome/free-solid-svg-icons'
+import { faGlobeAfrica, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../public/static/nprogress.css';
+import { ApolloProvider } from "@apollo/client";
 
-library.add(fab, faGlobeAfrica, faCopyright)
+library.add(fab, faGlobeAfrica, faEnvelope)
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, apollo }) {
   return (
-    <Page>
-      <Component {...pageProps} />
-    </Page>
+    <ApolloProvider client={apollo}>
+      <Page>
+        <Component {...pageProps} />
+      </Page>
+    </ApolloProvider>
   )
 }
 
-export default MyApp
+MyApp.getInitialProps = async function ({ Component, ctx }) {
+  let pageProps = {};
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+  pageProps.query = ctx.query;
+  return { pageProps };
+};
+
+export default withData(MyApp);

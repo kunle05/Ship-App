@@ -1,5 +1,4 @@
 import styled, { createGlobalStyle } from "styled-components";
-import Header from "./Header";
 import Meta from "./Meta";
 
 const GlobalStyles = createGlobalStyle`
@@ -52,13 +51,10 @@ const PageContent= styled.div`
 
 const Page = props => {
     return (
-        <div>
+        <div className="content">
             <GlobalStyles />
             <Meta />
-            <Header />
-            <div className="content">
-                {props.children}
-            </div>
+            {props.children}
         </div>
     );
 };

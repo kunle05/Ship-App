@@ -13,7 +13,7 @@ const Interior = props => {
                     <Col md="5">
                         <h4>That's right! You can ship to Nigeria and from Nigeria to USA.</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit debitis, non totam deserunt accusamus modi ratione quod voluptas. Numquam unde nostrum eligendi quam accusantium quia minus beatae explicabo fugiat deserunt!</p>
-                        <Link href="/moyo">
+                        <Link href="/location">
                             <a className="btn">Button One</a>
                         </Link>
                     </Col >

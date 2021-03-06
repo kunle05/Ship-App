@@ -1,0 +1,1 @@
+export const endPoint = 'http://localhost:7200';

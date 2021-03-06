@@ -39,10 +39,10 @@ const NavItems = () => {
                     Location
                     </DropdownToggle>
                     <DropdownMenu>
-                        <Link href="/moyo">
-                            <a className="dropdown-item">Option 1</a>
+                        <Link href="/locations">
+                            <a className="dropdown-item">All Locations</a>
                         </Link>
-                        <Link href="/moyo">
+                        <Link href="/locations">
                             <a className="dropdown-item">Option 1</a>
                         </Link>
                     </DropdownMenu>
