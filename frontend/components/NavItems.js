@@ -3,6 +3,9 @@ import { DropdownMenu, DropdownToggle, Nav, UncontrolledDropdown } from "reactst
 import styled from "styled-components";
 
 const StyledNavItems = styled.div`
+    .dropdown-menu {
+        width: max-content !important;
+    }
     .dropdown-item {
         padding: 1rem;
         font-size: 1.5rem;
@@ -42,8 +45,8 @@ const NavItems = () => {
                         <Link href="/locations">
                             <a className="dropdown-item">All Locations</a>
                         </Link>
-                        <Link href="/locations">
-                            <a className="dropdown-item">Option 1</a>
+                        <Link href="/locations/manage">
+                            <a className="dropdown-item">Manage Locations</a>
                         </Link>
                     </DropdownMenu>
                 </UncontrolledDropdown>

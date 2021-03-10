@@ -11,25 +11,16 @@ const StyledLocation = styled.div`
     }
     p {
         font-size: 1.8rem;
-        margin-bottom: 2rem;
+        margin: 2rem auto;
+    }
+    .col-md-6 {
+        margin-bottom: 5rem;
     }
     .card {
-        min-height: 52rem;
-        :hover {
-            p:first-child {
-                display: block;
-            }
-            .cardImage {
-                height: 10rem;
-            }
-            .card-body {
-                background: var(--white);
-                transition: all 0.6s;
-            }
-        }
+        min-height: 45rem;
     }
     .card-text {
-        min-height: 21rem;
+        /* min-height: 10rem; */
         a {
             color: var(--blue);
         }
@@ -37,28 +28,36 @@ const StyledLocation = styled.div`
             font-weight: 600;
         }
     }
-    p:first-child {
-        margin-top: 2rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-        bottom: 10rem;
-    }
     p:nth-child(2) {
         position: absolute;
-        bottom: 4rem;
+        bottom: 0rem;
     }
-    button {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        border-radius: 0;
-        :hover {
-            transform: none
+    @media (min-width: 1026px) {
+        .card {
+            :hover {
+                p:first-child {
+                    display: block;
+                }
+                .cardImage {
+                    height: 10rem;
+                }
+                .card-body {
+                    background: var(--white);
+                    transition: all 0.6s;
+                }
+            }
         }
+        p:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            /* bottom: 5rem; */
+        }
+    }
+    @media (max-width: 820px) {
+        margin: 5rem auto;
     }
 `;
 

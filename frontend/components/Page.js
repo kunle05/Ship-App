@@ -9,7 +9,7 @@ const GlobalStyles = createGlobalStyle`
         font-style: normal;
     }
     :root {
-        --red: #ff0000;
+        --red: #b31515;
         --black: #393939;
         --lightBlack: #3B3B3B;
         --blue: #002f60;

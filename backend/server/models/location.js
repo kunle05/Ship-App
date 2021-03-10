@@ -7,7 +7,7 @@ const LocationSchema = new mongoose.Schema({
     description: {type: String},
     phone: {type: String},
     email: {type: String},
-    status: {type: Number, default: 1, enum: [0, 1]}
+    active: {type: Boolean, default: true}
 }, {timestamps: true})
 
 const Location = mongoose.model('Location', LocationSchema);

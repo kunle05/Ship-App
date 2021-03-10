@@ -22,7 +22,7 @@ const typeDefs = gql`
         description: String
         phone: String
         email: String 
-        status: Int 
+        active: Boolean
         createdAt: Date
         updatedAt: Date
     }
@@ -71,12 +71,15 @@ const typeDefs = gql`
     }
 
     type Query {
-        locations: [Location]!
+        locations(active: Boolean) : [Location]!
+        location(_id: ID!) : Location
         users: [User]!
     }
 
     type Mutation {
-        newLocation(city: String!, address: String!, description: String, phone: String, email: String) : Location
+        newLocation(city: String!, address: String!, description: String, phone: String, email: String) : Location!
+        updateLocation(_id: ID!) : Location!
+        editLocation(_id: ID!, city: String, address: String, description: String, phone: String, email: String) : Location!
         newUser(firstname: String!, lastname: String!, username: String!, email: String!, password: String!, confirmPassword: String! location: ID!) : User
     }
 `;

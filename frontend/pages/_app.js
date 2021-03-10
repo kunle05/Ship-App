@@ -4,12 +4,12 @@ import Router from 'next/router';
 import withData from '../data';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { faGlobeAfrica, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faGlobeAfrica, faEnvelope, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../public/static/nprogress.css';
 import { ApolloProvider } from "@apollo/client";
 
-library.add(fab, faGlobeAfrica, faEnvelope)
+library.add(fab, faGlobeAfrica, faEnvelope, faPlus, faTimes)
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());

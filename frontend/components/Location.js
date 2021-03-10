@@ -1,12 +1,14 @@
-import { useQuery, gql } from '@apollo/client';
-import Head from 'next/head';
-import { Card, CardImg, CardBody, Row, CardTitle, CardSubtitle, CardText, Button, Container, Col } from 'reactstrap';
-import StyledLocation from "./styles/StyledLocation";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import { FormGroup, Label, Input } from 'reactstrap';
+import { LOCATIONS_QUERY } from './Locations'; 
+import useForm from "../lib/useForm";
 import SafeButton from "./styles/SafeButton";
+import Form from "./styles/Form";
 
 const LOCATION_QUERY = gql`
-    query LOCATION_QUERY {
-        locations {
+    query LOCATION_QUERY($id: ID!) {
+        location(_id: $id) {
             _id
             photo
             city
@@ -14,52 +16,65 @@ const LOCATION_QUERY = gql`
             description
             phone
             email
+            active
         }
     }
 `;
 
-const Location = () => {
-    const { loading, error, data } = useQuery(LOCATION_QUERY);
+const LOCATION_EDIT_MUTATION = gql`
+    mutation LOCATION_EDIT_MUTATION($id: ID!, $city: String, $address: String, $description: String, $phone: String, $email: String) {
+        editLocation(_id: $id, city: $city, address: $address, description: $description, phone: $phone, email: $email) {
+            _id
+        }
+    }
+`;
+
+const Location = ({id}) => {
+    const { error, loading, data } = useQuery(LOCATION_QUERY, { variables: { id } });
+    const { formData, handleChange, clearForm } = useForm(data?.location);
+    const [ locationEdit ] = useMutation(LOCATION_EDIT_MUTATION, { 
+        variables: { id, ...formData }, 
+        refetchQueries: [{query: LOCATIONS_QUERY}]
+    });
+    const router = useRouter();
+
     if(loading) return <p>loading</p>
     if(error) return <p>{ error.message }</p>
+    const { location } = data;
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+        await locationEdit();
+        clearForm();
+        router.push("/locations/manage");
+    }
 
     return (
-        <StyledLocation>
-        <Container>
-            <Head>
-                <title>Ship Safe Locations</title>
-            </Head>
-            <Row>
-            { data.locations.map(location => (
-                <Col md="4" key={location._id}>
-                    <Card>
-                        <div className="cardImage">
-                            <CardImg id="abc" top height="200" src={location.photo || "/static/photodefault.jpg"} alt={location.city} />
-                        </div>
-                        <CardBody>
-                            <CardTitle tag="h4">{location.city}</CardTitle>
-                            <CardSubtitle tag="h6" className="mb-2 text-muted">{location.address}</CardSubtitle>
-                            <CardText tag="div">
-                                <p>{location.description}</p>
-                                <p>
-                                    { location.email && <>
-                                        <span>Email:</span> 
-                                        <a href={`mailto:${location.email}`}> {location.email} </a><br/>
-                                    </> }
-                                    { location.phone && <>
-                                        <span>Phone:</span>
-                                        <a href={`tel:${location.phone}`}> {location.phone} </a>
-                                    </> } 
-                                </p>
-                            </CardText>
-                        </CardBody>
-                        <SafeButton>Disable</SafeButton>
-                    </Card>
-                </Col>
-            ))}
-            </Row>
-        </Container>
-        </StyledLocation>
+        <Form method="POST" onSubmit={handleSubmit} className="container col-md-6">
+            <fieldset disabled={loading} aria-busy={loading}> 
+                <FormGroup>
+                    <Label for="city">City</Label>
+                    <Input type="text" name="city" defaultValue={location.city} onChange={handleChange} />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="address">Address</Label>
+                    <Input type="text" name="address" defaultValue={location.address} onChange={handleChange} />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="description">Description</Label>
+                    <Input type="textarea" name="description" rows="3" defaultValue={location.description} onChange={handleChange} />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="email">Email</Label>
+                    <Input type="email" name="email" defaultValue={location.email} onChange={handleChange} />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="phone">Phone</Label>
+                    <Input type="text" name="phone" defaultValue={location.phone} onChange={handleChange} />
+                </FormGroup>
+                <SafeButton>Updat{loading ? 'ing' : 'e'} Location</SafeButton>
+            </fieldset>
+        </Form>
     );
 };
 

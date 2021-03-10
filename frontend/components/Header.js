@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Navbar } from 'reactstrap';
 import styled from "styled-components";
-import NavItems from "./Nav";
+import NavItems from "./NavItems";
 
 const StyledHeader = styled.header`
     padding: 2.5rem 12rem;

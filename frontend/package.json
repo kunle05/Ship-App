@@ -15,6 +15,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "bootstrap": "^4.6.0",
+    "date-fns": "^2.19.0",
     "graphql": "^15.5.0",
     "next": "10.0.7",
     "next-with-apollo": "^5.1.1",
