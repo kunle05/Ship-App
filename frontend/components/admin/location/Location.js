@@ -1,10 +1,10 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { FormGroup, Label, Input } from 'reactstrap';
-import { LOCATIONS_QUERY } from './Locations'; 
-import useForm from "../lib/useForm";
-import SafeButton from "./styles/SafeButton";
-import Form from "./styles/Form";
+import { LOCATIONS_QUERY } from '../../Locations'; 
+import useForm from "../../../lib/useForm";
+import SafeButton from "../../styles/SafeButton";
+import Form from "../../styles/Form";
 
 const LOCATION_QUERY = gql`
     query LOCATION_QUERY($id: ID!) {

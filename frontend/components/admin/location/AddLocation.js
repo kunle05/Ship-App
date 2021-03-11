@@ -1,8 +1,8 @@
 import { gql, useMutation } from "@apollo/client";
 import { FormGroup, Label, Input, Button } from 'reactstrap';
-import SafeButton from "./styles/SafeButton";
-import useForm from "../lib/useForm";
-import Form from "./styles/Form";
+import SafeButton from "../../styles/SafeButton";
+import useForm from "../../../lib/useForm";
+import Form from "../../styles/Form";
 
 const CREATE_LOCATION_MUTATION = gql`
     mutation CREATE_LOCATION_MUTATION($city: String!, $address: String!, $description: String, $phone: String, $email: String) {

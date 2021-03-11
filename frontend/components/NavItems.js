@@ -45,7 +45,7 @@ const NavItems = () => {
                         <Link href="/locations">
                             <a className="dropdown-item">All Locations</a>
                         </Link>
-                        <Link href="/locations/manage">
+                        <Link href="/admin/locations/">
                             <a className="dropdown-item">Manage Locations</a>
                         </Link>
                     </DropdownMenu>

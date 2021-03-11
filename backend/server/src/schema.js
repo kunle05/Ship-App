@@ -5,7 +5,7 @@ const typeDefs = gql`
 
     enum Permission {
         USER
-        ITEMDELETE
+        MANAGER
         ADMIN
     }
     enum Status {
@@ -30,11 +30,13 @@ const typeDefs = gql`
         _id: ID!
         firstname: String! 
         lastname: String! 
+        photo: String
         username: String!
         email: String! 
         location: Location!
-        status: Int! 
+        active: Boolean! 
         permissions: [Permission]
+        lastLogin: Date
         createdAt: Date
         updatedAt: Date
     }
@@ -74,6 +76,7 @@ const typeDefs = gql`
         locations(active: Boolean) : [Location]!
         location(_id: ID!) : Location
         users: [User]!
+        user(_id: ID!) : User
     }
 
     type Mutation {

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const LocationTable = styled.div`
+const StyledTableDiv = styled.div`
     margin: 5rem;
     a {
         color: var(--blue);
@@ -32,6 +32,9 @@ const LocationTable = styled.div`
             padding: .5rem;
             margin-bottom: 0;
         }
+        .clickable {
+            cursor: pointer; 
+        }
     }
     svg {
         height: 1.5rem;
@@ -42,4 +45,4 @@ const LocationTable = styled.div`
     }
 `;
 
-export default LocationTable;
+export default StyledTableDiv;

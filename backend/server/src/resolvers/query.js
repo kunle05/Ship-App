@@ -9,7 +9,12 @@ const Query = {
         return ctx.User.find().populate({
             path: 'location'
         });
-    }
+    },
+    user: async (_, args, ctx, info) => {
+        return ctx.User.findById(args._id).populate({
+            path: 'location'
+        });
+    },
 }
 
 module.exports = Query
