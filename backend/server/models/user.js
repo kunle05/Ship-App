@@ -22,18 +22,20 @@ UserSchema.virtual('confirmPassword')
   .set( value => this._confirmPassword = value );
 
 UserSchema.pre('validate', function(next) {
-    if (this.password !== this.confirmPassword) {
+    if (this.passsword && this.password !== this.confirmPassword) {
         this.invalidate('confirmPassword', 'Password must match confirm password');
     }
     next();
 });
 
 UserSchema.pre('save', function(next) {
-    bcrypt.hash(this.password, 10)
-    .then(hash => {
-        this.password = hash;
-        next();
-    })
+    if(this.password) {
+        bcrypt.hash(this.password, 10)
+        .then(hash => {
+            this.password = hash;
+            next();
+        })
+    }
 })
 
 UserSchema.post('save', function(doc, next) {

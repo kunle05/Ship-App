@@ -20,6 +20,18 @@ const Mutation = {
         return ctx.User.create({
             ...args
         })
+    },
+    updateUser: async (parent, args, ctx, info) => {
+        const user = await ctx.User.findById(args._id);
+        user.active = !user.active;
+        return user.save();
+    },
+    editUser: async (parent, args, ctx, info) => {
+        const { _id } = args;
+        delete args._id;
+
+        const user = await ctx.User.findByIdAndUpdate(_id, args);
+        return user;
     }
 }
 

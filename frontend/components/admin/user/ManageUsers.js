@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Table } from "reactstrap";
 import StyledTableDiv from "../../styles/StyledTableDiv";
 
-const USERS_QUERY = gql`
+export const USERS_QUERY = gql`
     query USERS_QUERY {
         users {
             _id
@@ -53,10 +53,10 @@ const ManageUsers = () => {
                                     <td>{user.username}</td>
                                     <td>{`${user.firstname} ${user.lastname}`}</td>
                                     <td>{user.email}</td>
-                                    <td>{user.active ? 'Active' : 'Disabled'}</td>
+                                    <td>{user.active ? 'Active' : <span style={{color: 'var(--red)'}}>Disabled</span>}</td>
                                     <td>{user.permissions[user.permissions.length - 1]}</td>
                                     <td>{user.location.city}</td>
-                                    <td>{user.lastLogin || 'Never'}</td>
+                                    <td>{user.lastLogin || 'Never Logged In'}</td>
                                 </tr>
                             </Link>
                         )) }

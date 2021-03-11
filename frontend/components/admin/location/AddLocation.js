@@ -59,11 +59,11 @@ const AddLocation = ({toggle}) => {
             <fieldset disabled={loading} aria-busy={loading}>
                 <FormGroup>
                     <Label for="city">City</Label>
-                    <Input type="text" name="city" value={formData.city} onChange={handleChange} required="true" />
+                    <Input type="text" name="city" value={formData.city} onChange={handleChange} required />
                 </FormGroup>
                 <FormGroup>
                     <Label for="address">Address</Label>
-                    <Input type="text" name="address" value={formData.address} onChange={handleChange} required="true" />
+                    <Input type="text" name="address" value={formData.address} onChange={handleChange} required />
                 </FormGroup>
                 <FormGroup>
                     <Label for="description">Description</Label>
