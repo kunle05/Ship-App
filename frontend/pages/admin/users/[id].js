@@ -1,9 +1,13 @@
 import SingleUser from "../../../components/admin/user/User";
+import AdminHeader from "../../../components/admin/Header";
 
 const User = ({query}) => {
     const { id } = query;
     return (
-        <SingleUser id={id} />
+        <>
+            <AdminHeader />
+            <SingleUser id={id} />
+        </>
     );
 };
 

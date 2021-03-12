@@ -10,15 +10,9 @@ const loading = keyframes`
 `;
 
 const Form = styled.form`
-    margin-top: 5rem;
+    margin-top: 3rem;
     padding: 3rem;
     box-shadow: var(--bs);
-    h2 {
-        font-size: 3rem;
-        font-weight: bold;
-        margin-bottom: 2rem;
-        color: var(--blue);
-    }
     fieldset {
         &:before {
             height: 10px;
@@ -44,6 +38,16 @@ const Form = styled.form`
     input, textarea {
         font-size: 1.3rem;
     }
+    .form-check {
+        margin-bottom: .5rem;
+        label {
+            margin-left: 2rem;
+        }
+        input {
+            height: 2rem;
+            width: 2rem;
+        }
+    }
     svg, .close {
         height: 2rem;
         font-size: 2rem;
@@ -58,12 +62,6 @@ const Form = styled.form`
     }
     @media (max-width: 600px) {
         max-width: 100%;
-        h2, .close {
-            font-size: 2.1rem;
-        }
-        .close {
-            line-height: initial;
-        }
     }
 `;
 

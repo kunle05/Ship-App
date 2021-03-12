@@ -1,10 +1,14 @@
 import Location from "../../../components/admin/location/Location";
+import AdminHeader from "../../../components/admin/Header";
 
 const EditLocation = ({query}) => {
     const { id } = query
 
     return (
-        <Location id={id} />
+        <>
+            <AdminHeader />
+            <Location id={id} />
+        </>
     );
 };
 

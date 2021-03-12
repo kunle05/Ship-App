@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { EDIT_USER } from './User';
-import { Modal, ModalHeader, ModalBody, FormGroup, Label, Input } from 'reactstrap';
-import SafeButton from '../../styles/SafeButton';
 import { useMutation } from '@apollo/client';
+import { FormGroup, Label, Input } from 'reactstrap';
+import { USERS_QUERY } from "./ManageUsers";
+import { EDIT_USER } from './EditUser';
+import Form from '../../styles/Form';
+import SafeButton from '../../styles/SafeButton';
 
 const Permissions = ["USER", "MANAGER", "ADMIN"];
 
-const Permission = ({open, resetMode, user}) => {
+const Permission = ({resetMode, user}) => {
     const [permissions, setPermissions] = useState(user.permissions);
-    const [updatePermissions] = useMutation(EDIT_USER, {variables: {
-        id: user._id,
-        permissions
-    }})
+    const [updatePermissions, { loading }] = useMutation(EDIT_USER, {
+        variables: {
+            id: user._id,
+            permissions
+        },
+        refetchQueries: [{query: USERS_QUERY}] 
+    })
 
     const toggle = () => {
         resetMode();
@@ -36,12 +41,14 @@ const Permission = ({open, resetMode, user}) => {
     }
 
     return (
-        <Modal isOpen={open} >
-            <ModalHeader toggle={toggle}></ModalHeader>
-            <ModalBody>
+        <Form method="POST" onSubmit={e => {
+            e.preventDefault();
+            saveChanges();
+        }}>
+            <fieldset disabled={loading} aria-busy={loading}>
                 {
                     Permissions.map((permission, idx) => (
-                        <FormGroup row key={idx}>
+                        <FormGroup check key={idx}>
                             <Input 
                                 type="checkbox" 
                                 name="permission" 
@@ -49,7 +56,7 @@ const Permission = ({open, resetMode, user}) => {
                                 value={permission}
                                 onChange={handleChange} 
                             />
-                            <Label for="permission">
+                            <Label check for="permission">
                                 {
                                     permission === 'USER' ? "Able to create shipments" :
                                     permission === 'MANAGER' ? "Able to create/edit shipments" :
@@ -60,11 +67,11 @@ const Permission = ({open, resetMode, user}) => {
                     ))
                 }
                 <div className="d-flex justify-content-end">
-                    <SafeButton className="cancel" onClick={toggle}>Cancel</SafeButton>
-                    <SafeButton onClick={saveChanges}>Submit</SafeButton>
+                    <SafeButton type="button" className="cancel" onClick={toggle}>Cancel</SafeButton>
+                    <SafeButton type="submit">Submit</SafeButton>
                 </div>
-            </ModalBody>
-        </Modal>
+            </fieldset>
+        </Form>
     );
 };
 

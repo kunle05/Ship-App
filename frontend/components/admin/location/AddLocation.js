@@ -1,5 +1,7 @@
 import { gql, useMutation } from "@apollo/client";
-import { FormGroup, Label, Input, Button } from 'reactstrap';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Container, FormGroup, Label, Input, Button } from 'reactstrap';
+import SingleItemDiv from "../../styles/SingleItemDiv";
 import SafeButton from "../../styles/SafeButton";
 import useForm from "../../../lib/useForm";
 import Form from "../../styles/Form";
@@ -51,38 +53,46 @@ const AddLocation = ({toggle}) => {
     }
 
     return (
-        <Form method="POST" onSubmit={handleSubmit} className="container col-md-5">
-            <Button close aria-label="Cancel" onClick={e => {resetForm(); toggle()}}>
-              <span aria-hidden>Cancel</span>
-            </Button>
-            <h2>Add{loading ? 'ing' : null} new location</h2>
-            <fieldset disabled={loading} aria-busy={loading}>
-                <FormGroup>
-                    <Label for="city">City</Label>
-                    <Input type="text" name="city" value={formData.city} onChange={handleChange} required />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="address">Address</Label>
-                    <Input type="text" name="address" value={formData.address} onChange={handleChange} required />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="description">Description</Label>
-                    <Input type="textarea" name="description" rows="3" value={formData.description} onChange={handleChange} />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="email">Email</Label>
-                    <Input type="email" name="email" value={formData.email} onChange={handleChange} />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="phone">Phone</Label>
-                    <Input type="text" name="phone" value={formData.phone} onChange={handleChange} />
-                </FormGroup>
-                <div className="d-flex justify-content-end">
-                    <SafeButton className="cancel" type="button" onClick={() => {resetForm(); toggle()}}>Cancel</SafeButton>
-                    <SafeButton type="submit">Add{loading ? 'ing' : null} Location!</SafeButton>
+        <SingleItemDiv>
+            <Container className="col-md-6">
+                <div className="title_header">
+                    <h2>
+                        <a onClick={e => {resetForm(); toggle()}}>Locations Manager</a>
+                        <FontAwesomeIcon icon="caret-right" />
+                        Add{loading ? 'ing' : null} Location
+                    </h2>
+                    <p>Create a new location</p>
                 </div>
-            </fieldset>
-        </Form>
+                <Form method="POST" onSubmit={handleSubmit}>
+                    <fieldset disabled={loading} aria-busy={loading}>
+                        <FormGroup>
+                            <Label for="city">City</Label>
+                            <Input type="text" name="city" value={formData.city} onChange={handleChange} required />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="address">Address</Label>
+                            <Input type="text" name="address" value={formData.address} onChange={handleChange} required />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="description">Description</Label>
+                            <Input type="textarea" name="description" rows="3" value={formData.description} onChange={handleChange} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="email">Email</Label>
+                            <Input type="email" name="email" value={formData.email} onChange={handleChange} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="phone">Phone</Label>
+                            <Input type="text" name="phone" value={formData.phone} onChange={handleChange} />
+                        </FormGroup>
+                        <div className="d-flex justify-content-end">
+                            <SafeButton className="cancel" type="button" onClick={() => {resetForm(); toggle()}}>Cancel</SafeButton>
+                            <SafeButton type="submit">Add{loading ? 'ing' : null} Location!</SafeButton>
+                        </div>
+                    </fieldset>
+                </Form>
+            </Container>
+        </SingleItemDiv>
     );
 };
 

@@ -3,7 +3,7 @@ import { Navbar } from 'reactstrap';
 import styled from "styled-components";
 import NavItems from "./NavItems";
 
-const StyledHeader = styled.header`
+export const StyledHeader = styled.header`
     padding: 2.5rem 12rem;
     border-bottom: 1rem solid var(--blue);
     .nav-item .nav-link {

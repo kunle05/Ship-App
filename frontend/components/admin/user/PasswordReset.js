@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, FormGroup, Label, Input } from 'reactstrap';
+import { FormGroup, Label, Input } from 'reactstrap';
 import Form from '../../styles/Form';
 import SafeButton from '../../styles/SafeButton';
 import { gql, useMutation } from '@apollo/client';
@@ -15,10 +15,10 @@ const CHANGE_USER_PASS = gql`
     }
 `;
 
-const PasswordReset = ({open, resetMode, id}) => {
+const PasswordReset = ({resetMode, id}) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [changePassword] = useMutation(CHANGE_USER_PASS, {variables: {
+    const [changePassword, { loading }] = useMutation(CHANGE_USER_PASS, {variables: {
         id,
         password,
         confirmPassword
@@ -37,25 +37,22 @@ const PasswordReset = ({open, resetMode, id}) => {
     }
 
     return (
-        <Modal isOpen={open} >
-            <ModalHeader toggle={toggle}></ModalHeader>
-            <ModalBody>
-                <Form method="POST" onSubmit={resetPassword} style={{margin: '0'}}>
-                    <FormGroup>
-                        <Label for="password"><b>New Password</b></Label>
-                        <Input type="password" name="password" value={password} onChange={e => setPassword(e.target.value)} required />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="confirmPassword"><b>Confirm Password</b></Label>
-                        <Input type="password" name="confirmPassword" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
-                    </FormGroup>
-                    <div className="d-flex justify-content-end">
-                        <SafeButton type="button" className="cancel" onClick={toggle}>Cancel</SafeButton>
-                        <SafeButton type="submit">Submit</SafeButton>
-                    </div>
-                </Form>
-            </ModalBody>
-        </Modal>
+        <Form method="POST" onSubmit={resetPassword}>
+            <fieldset disabled={loading} aria-busy={loading}>
+                <FormGroup>
+                    <Label for="password"><b>New Password</b></Label>
+                    <Input type="password" name="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="confirmPassword"><b>Confirm Password</b></Label>
+                    <Input type="password" name="confirmPassword" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
+                </FormGroup>
+                <div className="d-flex justify-content-end">
+                    <SafeButton type="button" className="cancel" onClick={toggle}>Cancel</SafeButton>
+                    <SafeButton type="submit">Submit</SafeButton>
+                </div>
+            </fieldset>
+        </Form>
     );
 };
 

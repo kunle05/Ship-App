@@ -62,10 +62,17 @@ const StyledTableDiv = styled.div`
         p {
             margin-bottom: 0;
             font-size: 1.8rem;
+            @media (max-width: 1025px) {
+                font-size: 1.6rem;
+                margin-bottom: 2rem;
+            }
         }
     }
     @media (max-width: 1025px) {
         margin: 1.5rem;
+    }
+    @media (max-width: 1025px) {
+    
     }
 `;
 

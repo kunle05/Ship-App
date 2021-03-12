@@ -1,8 +1,12 @@
 import ManageLocations from "../../../components/admin/location/ManageLocations"
+import AdminHeader from "../../../components/admin/Header";
 
 const Locations = () => {
     return (
-        <ManageLocations />
+        <>
+            <AdminHeader />
+            <ManageLocations />
+        </>
     );
 };
 

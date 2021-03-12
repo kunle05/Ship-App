@@ -1,14 +1,14 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { format, formatDistanceToNow } from "date-fns";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useState } from "react";
-import { FormGroup, Label, Input } from 'reactstrap';
-import { USERS_QUERY } from "./ManageUsers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Container, Row } from 'reactstrap';
 import PasswordReset from "./PasswordReset";
 import Permission from "./Permission";
-import useForm from "../../../lib/useForm";
-import Form from "../../styles/Form";
 import SafeButton from "../../styles/SafeButton";
+import SingleItemDiv from "../../styles/SingleItemDiv";
+import EditUser from "./EditUser";
 
 export const USER_QUERY = gql`
     query USER_QUERY($id: ID!) {
@@ -37,91 +37,68 @@ const UPDATE_USER = gql`
         updateUser(_id: $id) {
             _id
             active
-        }
-    }
-`;
-
-export const EDIT_USER = gql`
-    mutation EDIT_USER($id: ID!, $username: String, $firstname: String, $lastname: String, $email: String, $permissions: [Permission]) {
-        editUser(_id: $id, username: $username, firstname: $firstname, lastname: $lastname, email: $email, permissions: $permissions) {
-            _id
+            updatedAt
         }
     }
 `;
 
 const SingleUser = ({id}) => {
     const [ mode, setMode ] = useState({
+        editMode: true,
         passwordMode: false,
         permissionMode: false,
     });
     const { loading, error, data } = useQuery(USER_QUERY, { variables: { id } });
     const [updateUser] = useMutation(UPDATE_USER, { variables: { id } });
-    const { formData, handleChange } = useForm(data?.user);
-    const [editUser] = useMutation(EDIT_USER, { 
-        variables: { id, ...formData },
-        refetchQueries: [{query: USERS_QUERY}] 
-    });
-    const router = useRouter();
-    
+
     if(loading) return <p>loading</p>
     if(error) return <p>{ error.message }</p>
     const { user } = data;
 
     const showDefault = () => {
         setMode({
+            editMode: true,
             passwordMode: false,
             permissionMode: false,
         })
     }
 
     return (
-        <div>
-            <img src={user.photo || '/static/photodefault.jpg'} alt={user.username} width="150" />
-            <p>{`${user.firstname} ${user.lastname}`}</p>
-            <p>Active since <b>{ format( new Date(user.createdAt), "MMM d, yyyy")}</b></p>
-            <p>Last Logged In: <b>{ user.lastLogin ? `${formatDistanceToNow( new Date(user.lastLogin) )} ago` : 'Never'}</b></p>
-            <p>Last Modified: <b>{ formatDistanceToNow( new Date(user.updatedAt) )} ago</b></p>
-
-            <SafeButton onClick={updateUser} active={!user.active} disabled={loading}>
-                { user.active ? "SUSPEND" : "ENABLE" }
-            </SafeButton>
-            <SafeButton onClick={e => setMode({...mode, permissionMode: true})}>
-                Set Permissions
-            </SafeButton>
-            <SafeButton onClick={e => setMode({...mode, passwordMode: true})}>
-                Reset Password
-            </SafeButton>
-
-            <Form method="POST" onSubmit={async e => {
-                e.preventDefault();
-                await editUser();
-            }}>
-                <fieldset disabled={loading} aria-busy={loading}>
-                    <FormGroup>
-                        <Label for="username">Username</Label>
-                        <Input type="text" name="username" defaultValue={user.username} onChange={handleChange} required />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="firstname">First Name</Label>
-                        <Input type="text" name="firstname" defaultValue={user.firstname} onChange={handleChange} required />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="lastname">Last Name</Label>
-                        <Input type="text" name="lastname" defaultValue={user.lastname} onChange={handleChange} required />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="email">Email</Label>
-                        <Input type="email" name="email" defaultValue={user.email} onChange={handleChange} required />
-                    </FormGroup>
-                    <div className="d-flex justify-content-end">
-                        <SafeButton className="cancel" type="button" onClick={() => router.back()}>Cancel</SafeButton>
-                        <SafeButton type="submit">Sav{loading ? 'ing' : 'e'} Changes</SafeButton>
-                    </div>
-                </fieldset>
-            </Form>
-            <PasswordReset open={mode.passwordMode} resetMode={showDefault} id={user._id} />
-            <Permission open={mode.permissionMode} resetMode={showDefault} user={user} />
-        </div>
+        <SingleItemDiv>
+            <Container className="col-md-6">
+                <div className="title_header">
+                    <h2>
+                        <Link href="/admin/users">Users Manager</Link>
+                        <FontAwesomeIcon icon="caret-right" />
+                        {user.username}
+                    </h2>
+                    <p>Editing user - {user.username}</p>
+                </div>
+                <div className="text-center">
+                    <img className="rounded-circle" src={user.photo || '/static/person.png'} alt={user.username} width="150" height="150" />
+                    <h3>{`${user.firstname} ${user.lastname}`}</h3>
+                    <p className="info"><span>Active since</span> <b>{ format( new Date(user.createdAt), "MMM d, yyyy")}</b></p>
+                    <p className="info"><span>Last Logged In:</span> <b>{ user.lastLogin ? `${formatDistanceToNow( new Date(user.lastLogin) )} ago` : 'Never'}</b></p>
+                    <p className="info"><span>Last Modified:</span> <b>{ formatDistanceToNow( new Date(user.updatedAt) )} ago</b></p>
+                    <Container className="col-md-8">
+                        <Row className="justify-content-around">
+                            <SafeButton onClick={updateUser} active={!user.active} disabled={loading}>
+                                { user.active ? "SUSPEND" : "ENABLE" }
+                            </SafeButton>
+                            <SafeButton onClick={e => setMode({editMode: false, passwordMode: false, permissionMode: true})}>
+                                Set Permissions
+                            </SafeButton>
+                            <SafeButton onClick={e => setMode({editMode: false, permissionMode: false, passwordMode: true})}>
+                                Reset Password
+                            </SafeButton>
+                        </Row>
+                    </Container>
+                </div>
+                { mode.editMode && <EditUser user={user} /> }
+                { mode.passwordMode && <PasswordReset resetMode={showDefault} id={user._id} /> }
+                { mode.permissionMode && <Permission resetMode={showDefault} user={user} /> }                
+            </Container>
+        </SingleItemDiv>
     );
 };
 
