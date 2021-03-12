@@ -1,6 +1,6 @@
 import { useQuery, gql, useMutation } from '@apollo/client';
 import Link from 'next/link';
-import { Table } from 'reactstrap';
+import { Row, Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { format } from 'date-fns';
@@ -40,7 +40,13 @@ const ManageLocations = () => {
 
     return (
         <StyledTableDiv>
-            <SafeButton onClick={toggle}><FontAwesomeIcon icon="plus" /> New Location</SafeButton>
+            <Row className="justify-content-between">
+                <div>
+                    <h2>Locations Manager</h2>
+                    <p>Create, edit and disable locations</p>
+                </div>
+                <SafeButton onClick={toggle}><FontAwesomeIcon icon="plus" /> New Location</SafeButton>
+            </Row>
             <div className="table-responsive">
                 <Table striped hover>
                     <thead>

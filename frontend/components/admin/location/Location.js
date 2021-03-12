@@ -46,7 +46,7 @@ const Location = ({id}) => {
         e.preventDefault();
         await locationEdit();
         clearForm();
-        router.push("/locations/manage");
+        router.push("admin/locations/");
     }
 
     return (
@@ -72,7 +72,10 @@ const Location = ({id}) => {
                     <Label for="phone">Phone</Label>
                     <Input type="text" name="phone" defaultValue={location.phone} onChange={handleChange} />
                 </FormGroup>
-                <SafeButton>Updat{loading ? 'ing' : 'e'} Location</SafeButton>
+                <div className="d-flex justify-content-end">
+                    <SafeButton className="cancel" type="button" onClick={() => router.back()}>Cancel</SafeButton>
+                    <SafeButton type="submit">Sav{loading ? 'ing' : 'e'} Changes</SafeButton>
+                </div>
             </fieldset>
         </Form>
     );

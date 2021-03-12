@@ -1,12 +1,16 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { format, formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { FormGroup, Label, Input } from 'reactstrap';
+import { USERS_QUERY } from "./ManageUsers";
+import PasswordReset from "./PasswordReset";
+import Permission from "./Permission";
 import useForm from "../../../lib/useForm";
 import Form from "../../styles/Form";
 import SafeButton from "../../styles/SafeButton";
-import { USERS_QUERY } from "./ManageUsers";
 
-const USER_QUERY = gql`
+export const USER_QUERY = gql`
     query USER_QUERY($id: ID!) {
         user(_id: $id) {
             _id
@@ -23,6 +27,7 @@ const USER_QUERY = gql`
             }
             lastLogin
             createdAt
+            updatedAt
         }
     }
 `;
@@ -36,15 +41,19 @@ const UPDATE_USER = gql`
     }
 `;
 
-const EDIT_USER = gql`
-    mutation EDIT_USER($id: ID!, $username: String, $firstname: String, $lastname: String, $email: String) {
-        editUser(_id: $id, username: $username, firstname: $firstname, lastname: $lastname, email: $email) {
+export const EDIT_USER = gql`
+    mutation EDIT_USER($id: ID!, $username: String, $firstname: String, $lastname: String, $email: String, $permissions: [Permission]) {
+        editUser(_id: $id, username: $username, firstname: $firstname, lastname: $lastname, email: $email, permissions: $permissions) {
             _id
         }
     }
 `;
 
 const SingleUser = ({id}) => {
+    const [ mode, setMode ] = useState({
+        passwordMode: false,
+        permissionMode: false,
+    });
     const { loading, error, data } = useQuery(USER_QUERY, { variables: { id } });
     const [updateUser] = useMutation(UPDATE_USER, { variables: { id } });
     const { formData, handleChange } = useForm(data?.user);
@@ -52,10 +61,18 @@ const SingleUser = ({id}) => {
         variables: { id, ...formData },
         refetchQueries: [{query: USERS_QUERY}] 
     });
+    const router = useRouter();
     
     if(loading) return <p>loading</p>
     if(error) return <p>{ error.message }</p>
     const { user } = data;
+
+    const showDefault = () => {
+        setMode({
+            passwordMode: false,
+            permissionMode: false,
+        })
+    }
 
     return (
         <div>
@@ -63,9 +80,16 @@ const SingleUser = ({id}) => {
             <p>{`${user.firstname} ${user.lastname}`}</p>
             <p>Active since <b>{ format( new Date(user.createdAt), "MMM d, yyyy")}</b></p>
             <p>Last Logged In: <b>{ user.lastLogin ? `${formatDistanceToNow( new Date(user.lastLogin) )} ago` : 'Never'}</b></p>
+            <p>Last Modified: <b>{ formatDistanceToNow( new Date(user.updatedAt) )} ago</b></p>
 
             <SafeButton onClick={updateUser} active={!user.active} disabled={loading}>
-                { user.active ? "DIS" : "EN" }ABLE
+                { user.active ? "SUSPEND" : "ENABLE" }
+            </SafeButton>
+            <SafeButton onClick={e => setMode({...mode, permissionMode: true})}>
+                Set Permissions
+            </SafeButton>
+            <SafeButton onClick={e => setMode({...mode, passwordMode: true})}>
+                Reset Password
             </SafeButton>
 
             <Form method="POST" onSubmit={async e => {
@@ -89,9 +113,14 @@ const SingleUser = ({id}) => {
                         <Label for="email">Email</Label>
                         <Input type="email" name="email" defaultValue={user.email} onChange={handleChange} required />
                     </FormGroup>
-                    <SafeButton type="submit">Sav{loading ? 'ing' : 'e'} Changes</SafeButton>
+                    <div className="d-flex justify-content-end">
+                        <SafeButton className="cancel" type="button" onClick={() => router.back()}>Cancel</SafeButton>
+                        <SafeButton type="submit">Sav{loading ? 'ing' : 'e'} Changes</SafeButton>
+                    </div>
                 </fieldset>
             </Form>
+            <PasswordReset open={mode.passwordMode} resetMode={showDefault} id={user._id} />
+            <Permission open={mode.permissionMode} resetMode={showDefault} user={user} />
         </div>
     );
 };

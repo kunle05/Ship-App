@@ -85,7 +85,8 @@ const typeDefs = gql`
         editLocation(_id: ID!, city: String, address: String, description: String, phone: String, email: String) : Location!
         newUser(firstname: String!, lastname: String!, username: String!, email: String!, password: String!, confirmPassword: String! location: ID!) : User
         updateUser(_id: ID!) : User!
-        editUser(_id: ID!, username: String, firstname: String, lastname: String, email: String) : User!
+        editUser(_id: ID!, username: String, firstname: String, lastname: String, email: String, permissions: [Permission]) : User!
+        changeUserPass(_id: ID!, password: String!, confirmPassword: String!) : User!
     }
 `;
 

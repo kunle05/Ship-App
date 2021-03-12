@@ -41,6 +41,26 @@ const GlobalStyles = createGlobalStyle`
     p {
         margin-bottom: 3rem;
     }
+    .modal {
+        top: calc(25% - 50px);
+    }
+    .modal-header {
+        border: 0;
+        button {
+            font-size: 3rem;
+            color: var(--red);
+            opacity: 1;
+        }
+    }
+    .modal-body {
+        form {
+            padding: 1.5rem;
+        }
+    }
+    .modal-backdrop
+    {
+        opacity:0.6 !important;
+    }
 `;
 
 const PageContent= styled.div`

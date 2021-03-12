@@ -1,3 +1,5 @@
+const matchPassword = require("../../../utils");
+
 const Mutation = {
     newLocation: (parent, args, ctx, info) => {
         return ctx.Location.create({
@@ -12,14 +14,12 @@ const Mutation = {
     editLocation: async (parent, args, ctx, info) => {
         const { _id } = args;
         delete args._id;
-
         const location = await ctx.Location.findByIdAndUpdate(_id, args);
         return location;
     },
     newUser: (parent, args, ctx, info) => {
-        return ctx.User.create({
-            ...args
-        })
+        matchPassword(args);
+        return ctx.User.create(args);
     },
     updateUser: async (parent, args, ctx, info) => {
         const user = await ctx.User.findById(args._id);
@@ -29,9 +29,14 @@ const Mutation = {
     editUser: async (parent, args, ctx, info) => {
         const { _id } = args;
         delete args._id;
-
         const user = await ctx.User.findByIdAndUpdate(_id, args);
         return user;
+    },
+    changeUserPass: async (parent, args, ctx, info) => {
+        matchPassword(args);
+        const user = await ctx.User.findById(args._id);
+        user.password = args.password
+        return user.save();
     }
 }
 

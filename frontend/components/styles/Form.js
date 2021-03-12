@@ -35,6 +35,12 @@ const Form = styled.form`
     button {
         margin-top: 2rem;
     }
+    button.cancel {
+        margin-right: 3rem;
+        background: var(--white);
+        color: var(--blue);
+        border: 1px solid var(--blue);
+    }
     input, textarea {
         font-size: 1.3rem;
     }

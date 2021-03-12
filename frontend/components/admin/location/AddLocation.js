@@ -77,7 +77,10 @@ const AddLocation = ({toggle}) => {
                     <Label for="phone">Phone</Label>
                     <Input type="text" name="phone" value={formData.phone} onChange={handleChange} />
                 </FormGroup>
-                <SafeButton type="submit">Creat{loading ? 'ing' : 'e'} Location</SafeButton>
+                <div className="d-flex justify-content-end">
+                    <SafeButton className="cancel" type="button" onClick={() => {resetForm(); toggle()}}>Cancel</SafeButton>
+                    <SafeButton type="submit">Add{loading ? 'ing' : null} Location!</SafeButton>
+                </div>
             </fieldset>
         </Form>
     );

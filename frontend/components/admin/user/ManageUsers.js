@@ -1,6 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from 'next/link';
-import { Table } from "reactstrap";
+import { Row, Table } from "reactstrap";
 import StyledTableDiv from "../../styles/StyledTableDiv";
 
 export const USERS_QUERY = gql`
@@ -29,6 +30,18 @@ const ManageUsers = () => {
 
     return (
         <StyledTableDiv>
+            <Row className="justify-content-between">
+                <div>
+                    <h2>Users Manager</h2>
+                    <p>Create, edit and manage users permissions</p>
+                </div>
+                <Link href="/admin/users/add">
+                    <a className="btn">
+                        <FontAwesomeIcon icon="user-plus" /> 
+                        Create New User!
+                    </a>
+                </Link>
+            </Row>
             <div className="table-responsive">
                 <Table striped hover>
                     <thead>
@@ -53,7 +66,7 @@ const ManageUsers = () => {
                                     <td>{user.username}</td>
                                     <td>{`${user.firstname} ${user.lastname}`}</td>
                                     <td>{user.email}</td>
-                                    <td>{user.active ? 'Active' : <span style={{color: 'var(--red)'}}>Disabled</span>}</td>
+                                    <td>{user.active ? 'Active' : <span style={{color: 'var(--red)'}}>Suspended</span>}</td>
                                     <td>{user.permissions[user.permissions.length - 1]}</td>
                                     <td>{user.location.city}</td>
                                     <td>{user.lastLogin || 'Never Logged In'}</td>
