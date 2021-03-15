@@ -4,6 +4,7 @@ const StyledTableDiv = styled.div`
     margin: 5rem;
     a {
         color: var(--blue);
+        font-weight: bold;
     }
     button {
         padding: 1.2rem;

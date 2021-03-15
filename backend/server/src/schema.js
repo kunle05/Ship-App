@@ -79,6 +79,9 @@ const typeDefs = gql`
         user(_id: ID!) : User
         me: User
     }
+    type Message {
+        message: String!
+    }
 
     type Mutation {
         newLocation(city: String!, address: String!, description: String, phone: String, email: String) : Location!
@@ -89,6 +92,7 @@ const typeDefs = gql`
         editUser(_id: ID!, username: String, firstname: String, lastname: String, email: String, permissions: [Permission]) : User!
         changeUserPass(_id: ID!, password: String!, confirmPassword: String!) : User!
         signIn(username: String!, password: String!) : User
+        signOut: Message
     }
 `;
 

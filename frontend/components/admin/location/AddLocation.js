@@ -57,7 +57,7 @@ const AddLocation = ({toggle}) => {
             <Container className="col-md-6">
                 <div className="title_header">
                     <h2>
-                        <a onClick={e => {resetForm(); toggle()}}>Locations Manager</a>
+                        <a className="safelink" onClick={e => {resetForm(); toggle()}}>Locations Manager</a>
                         <FontAwesomeIcon icon="caret-right" />
                         Add{loading ? 'ing' : null} Location
                     </h2>

@@ -1,4 +1,4 @@
-import ASingleUser from "../../../components/admin/user/User";
+import ASingleUser from "../../../components/admin/user/ASingleUser";
 import AdminHeader from "../../../components/admin/AdminHeader";
 import CheckLogIn from "../../../components/admin/user/CheckLogIn";
 

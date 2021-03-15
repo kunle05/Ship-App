@@ -115,7 +115,7 @@ const AddUser = () => {
                             <Input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
                         </FormGroup>
                         <div className="d-flex justify-content-end">
-                            <SafeButton className="cancel" type="button" onClick={() => router.back()}>Cancel</SafeButton>
+                            <SafeButton className="cancel" type="button" onClick={() => router.push("/admin/users/")}>Cancel</SafeButton>
                             <SafeButton type="submit">Add{creating ? 'ing' : null} User!</SafeButton>
                         </div>
                     </fieldset>

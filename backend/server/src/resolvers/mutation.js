@@ -1,11 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const matchPassword = require("../../../utils");
+const { matchPassword, hasPermission }= require("../../../utils");
 
 const Mutation = {
-    newLocation: (parent, args, ctx, info) => {
+    newLocation: async (parent, args, ctx, info) => {
         if(!ctx.req.userId) {
             throw new Error("Log in is required")
+        }
+        const admin = await ctx.User.findById(ctx.req.userId);
+        if(!hasPermission(admin)) {
+            throw new Error("You got caught!!")
         }
         return ctx.Location.create({
             ...args
@@ -15,6 +19,10 @@ const Mutation = {
         if(!ctx.req.userId) {
             throw new Error("Log in is required")
         }
+        const admin = await ctx.User.findById(ctx.req.userId);
+        if(!hasPermission(admin)) {
+            throw new Error("You got caught!!")
+        }
         const location = await ctx.Location.findById(args._id);
         location.active = !location.active;
         return location.save();
@@ -22,6 +30,10 @@ const Mutation = {
     editLocation: async (parent, args, ctx, info) => {
         if(!ctx.req.userId) {
             throw new Error("Log in is required")
+        }
+        const admin = await ctx.User.findById(ctx.req.userId);
+        if(!hasPermission(admin)) {
+            throw new Error("You got caught!!")
         }
         const { _id } = args;
         delete args._id;
@@ -33,6 +45,10 @@ const Mutation = {
             throw new Error("Log in is required")
         }
         matchPassword(args);
+        const admin = await ctx.User.findById(ctx.req.userId);
+        if(!hasPermission(admin)) {
+            throw new Error("You got caught!!")
+        }
         const password = await bcrypt.hash(args.password, 10);
         return ctx.User.create({
             ...args,
@@ -43,24 +59,40 @@ const Mutation = {
         if(!ctx.req.userId) {
             throw new Error("Log in is required")
         }
+        const admin = await ctx.User.findById(ctx.req.userId);
+        if(!hasPermission(admin)) {
+            throw new Error("You got caught!!")
+        }
         const user = await ctx.User.findById(args._id);
         user.active = !user.active;
         return user.save();
     },
-    editUser: async (parent, args, ctx, info) => {
+    editUser: async (_, args, ctx, info) => {
         if(!ctx.req.userId) {
             throw new Error("Log in is required")
         }
         const { _id } = args;
+        if(ctx.req.userId != _id) {
+            const admin = await ctx.User.findById(ctx.req.userId);
+            if(!hasPermission(admin)) {
+                throw new Error("You got caught!!")
+            }
+        }
         delete args._id;
         const user = await ctx.User.findByIdAndUpdate(_id, args);
         return user;
     },
-    changeUserPass: async (parent, args, ctx, info) => {
+    changeUserPass: async (_, args, ctx, info) => {
         if(!ctx.req.userId) {
             throw new Error("Log in is required")
         }
         matchPassword(args);
+        if(ctx.req.userId != args._id) {
+            const admin = await ctx.User.findById(ctx.req.userId);
+            if(!hasPermission(admin)) {
+                throw new Error("You got caught!!")
+            }
+        }
         const user = await ctx.User.findById(args._id);
         const password = await bcrypt.hash(args.password, 10);
         user.password = password;
@@ -88,7 +120,12 @@ const Mutation = {
             maxAge: 1000 * 60 * 60  //1hour cookie
         });
         return user;
+    },
+    signOut: (_, args, ctx, info) => {
+        ctx.res.clearCookie('token');
+        return { message: "You have successfully signed out"}
     }
+
 }
 
 module.exports = Mutation

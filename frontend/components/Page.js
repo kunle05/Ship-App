@@ -61,6 +61,9 @@ const GlobalStyles = createGlobalStyle`
     {
         opacity:0.6 !important;
     }
+    .safelink {
+        cursor: pointer;
+    }
 `;
 
 const PageContent= styled.div`

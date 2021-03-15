@@ -5,4 +5,8 @@ function matchPassword(args) {
     }
 }
 
-module.exports = matchPassword;
+function hasPermission(user, level="ADMIN") {
+    return user.permissions.includes(level);
+}
+
+module.exports = { matchPassword, hasPermission };

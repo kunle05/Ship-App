@@ -1,5 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { format } from "date-fns";
 import Link from 'next/link';
 import { Row, Table } from "reactstrap";
 import StyledTableDiv from "../../styles/StyledTableDiv";
@@ -67,9 +68,12 @@ const ManageUsers = () => {
                                     <td>{`${user.firstname} ${user.lastname}`}</td>
                                     <td>{user.email}</td>
                                     <td>{user.active ? 'Active' : <span style={{color: 'var(--red)'}}>Suspended</span>}</td>
-                                    <td>{user.permissions[user.permissions.length - 1]}</td>
+                                    <td>{
+                                        user.permissions.includes("ADMIN") ? "ADMIN" :
+                                        user.permissions.includes("MANAGER") ? "MANAGER" : "USER"
+                                    }</td>
                                     <td>{user.location.city}</td>
-                                    <td>{user.lastLogin || 'Never Logged In'}</td>
+                                    <td>{format(new Date(user.lastLogin), "MMM d yyyy, h:mm a")  || 'Never Logged In'}</td>
                                 </tr>
                             </Link>
                         )) }

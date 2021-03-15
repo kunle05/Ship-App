@@ -42,14 +42,26 @@ const EditUser = ({ user }) => {
                     <Label for="lastname">Last Name</Label>
                     <Input type="text" name="lastname" defaultValue={user.lastname} onChange={handleChange} required />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="email">Email</Label>
-                    <Input type="email" name="email" defaultValue={user.email} onChange={handleChange} required />
-                </FormGroup>
-                <div className="d-flex justify-content-end">
-                    <SafeButton className="cancel" type="button" onClick={() => router.back()}>Cancel</SafeButton>
-                    <SafeButton type="submit">Sav{loading ? 'ing' : 'e'} Changes</SafeButton>
-                </div>
+                {
+                    user.permissions.includes("ADMIN") && <>
+                        <FormGroup>
+                            <Label for="email">Email</Label>
+                            <Input type="email" name="email" defaultValue={user.email} onChange={handleChange} required />
+                        </FormGroup>
+                        <div className="d-flex justify-content-end">
+                            <SafeButton className="cancel" type="button" onClick={() => router.push("/admin/users/")}>Cancel</SafeButton>
+                            <SafeButton type="submit">Sav{loading ? 'ing' : 'e'} Changes</SafeButton>
+                        </div>
+                    </>
+                }
+                {
+                    !user.permissions.includes("ADMIN") && <>
+                        <div className="d-flex justify-content-end">
+                            <SafeButton className="cancel" type="button" onClick={() => router.push("/admin/")}>Cancel</SafeButton>
+                            <SafeButton type="submit">Sav{loading ? 'ing' : 'e'} Changes</SafeButton>
+                        </div>
+                    </>
+                }
             </fieldset>
         </Form>
     );
