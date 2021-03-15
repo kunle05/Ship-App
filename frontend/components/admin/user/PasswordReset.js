@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
 import { FormGroup, Label, Input } from 'reactstrap';
 import Form from '../../styles/Form';
 import SafeButton from '../../styles/SafeButton';
-import { gql, useMutation } from '@apollo/client';
 
 const CHANGE_USER_PASS = gql`
     mutation CHANGE_USER_PASS($id: ID!, $password: String!, $confirmPassword: String!) {

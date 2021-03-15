@@ -61,7 +61,7 @@ const AddUser = () => {
         e.preventDefault();
         await create();
         resetForm();
-        router.back();
+        router.push("/admin/users/");
     }
 
     if(loading) return <p>loading</p>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Navbar } from 'reactstrap';
 import { StyledHeader, Logo } from '../Header';
-import NavItems from '../NavItems';
+import AdminNavItems from "./AdminNavItems";
 
 const AdminHeader = () => {
     return (
@@ -10,7 +10,7 @@ const AdminHeader = () => {
                 <Logo>
                     <Link href="/">Ship Safe</Link>
                 </Logo>
-                <NavItems />
+                <AdminNavItems />
             </Navbar>
         </StyledHeader>
     );

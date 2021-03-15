@@ -13,7 +13,7 @@ const GlobalStyles = createGlobalStyle`
         --black: #393939;
         --lightBlack: #3B3B3B;
         --blue: #002f60;
-        --bgBlue: #e4f7ff;
+        --bgBlue: #e6f2ff;
         --grey: #3A3A3A;
         --gray: var(--grey);
         --lightGrey: #e1e1e1;

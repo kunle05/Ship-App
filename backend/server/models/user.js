@@ -17,27 +17,6 @@ const UserSchema = new mongoose.Schema({
     resetTokenExpiry: {type: Number}
 }, {timestamps: true})
 
-// UserSchema.virtual('confirmPassword')
-//   .get( () => this._confirmPassword )
-//   .set( value => this._confirmPassword = value );
-
-// UserSchema.pre('validate', function(next) {
-//     if (this.password && this.password !== this.confirmPassword) {
-//         this.invalidate('confirmPassword', 'Password must match confirm password');
-//     }
-//     next();
-// });
-
-UserSchema.pre('save', function(next) {
-    if(this.password) {
-        bcrypt.hash(this.password, 10)
-        .then(hash => {
-            this.password = hash;
-            next();
-        })
-    }
-})
-
 UserSchema.post('save', function(doc, next) {
     doc.populate('location', () => next());
 });

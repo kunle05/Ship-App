@@ -1,4 +1,4 @@
-import { useQuery, gql, useMutation } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import Head from 'next/head';
 import { Card, CardImg, CardBody, Row, CardTitle, CardSubtitle, CardText, Button, Container, Col } from 'reactstrap';
 import StyledLocation from "./styles/StyledLocation";

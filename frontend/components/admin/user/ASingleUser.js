@@ -10,8 +10,8 @@ import SafeButton from "../../styles/SafeButton";
 import SingleItemDiv from "../../styles/SingleItemDiv";
 import EditUser from "./EditUser";
 
-export const USER_QUERY = gql`
-    query USER_QUERY($id: ID!) {
+const SINGLE_USER_QUERY = gql`
+    query SINGLE_USER_QUERY($id: ID!) {
         user(_id: $id) {
             _id
             firstname
@@ -42,13 +42,13 @@ const UPDATE_USER = gql`
     }
 `;
 
-const SingleUser = ({id}) => {
+const ASingleUser = ({id}) => {
     const [ mode, setMode ] = useState({
         editMode: true,
         passwordMode: false,
         permissionMode: false,
     });
-    const { loading, error, data } = useQuery(USER_QUERY, { variables: { id } });
+    const { loading, error, data } = useQuery(SINGLE_USER_QUERY, { variables: { id } });
     const [updateUser] = useMutation(UPDATE_USER, { variables: { id } });
 
     if(loading) return <p>loading</p>
@@ -102,4 +102,4 @@ const SingleUser = ({id}) => {
     );
 };
 
-export default SingleUser;
+export default ASingleUser;

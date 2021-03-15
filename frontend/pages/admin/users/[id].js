@@ -1,13 +1,14 @@
-import SingleUser from "../../../components/admin/user/User";
-import AdminHeader from "../../../components/admin/Header";
+import ASingleUser from "../../../components/admin/user/User";
+import AdminHeader from "../../../components/admin/AdminHeader";
+import CheckLogIn from "../../../components/admin/user/CheckLogIn";
 
 const User = ({query}) => {
     const { id } = query;
     return (
-        <>
+        <CheckLogIn>
             <AdminHeader />
-            <SingleUser id={id} />
-        </>
+            <ASingleUser id={id} />
+        </CheckLogIn>
     );
 };
 

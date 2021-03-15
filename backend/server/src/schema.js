@@ -77,6 +77,7 @@ const typeDefs = gql`
         location(_id: ID!) : Location
         users: [User]!
         user(_id: ID!) : User
+        me: User
     }
 
     type Mutation {
@@ -87,6 +88,7 @@ const typeDefs = gql`
         updateUser(_id: ID!) : User!
         editUser(_id: ID!, username: String, firstname: String, lastname: String, email: String, permissions: [Permission]) : User!
         changeUserPass(_id: ID!, password: String!, confirmPassword: String!) : User!
+        signIn(username: String!, password: String!) : User
     }
 `;
 

@@ -23,13 +23,13 @@ const StyledNavItems = styled.div`
     }
 `;
 
-const NavItems = () => {
+const AdminNavItems = () => {
     return (
         <StyledNavItems>
             <Nav>
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav>
-                    Tracking
+                    Shipping
                     </DropdownToggle>
                     <DropdownMenu>
                         <Link href="/">
@@ -39,21 +39,24 @@ const NavItems = () => {
                 </UncontrolledDropdown>
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav>
-                    Location
+                    Locations
                     </DropdownToggle>
                     <DropdownMenu>
-                        <Link href="/locations">
-                            <a className="dropdown-item">All Locations</a>
+                        <Link href="/admin/locations/">
+                            <a className="dropdown-item">Manage Locations</a>
                         </Link>
                     </DropdownMenu>
                 </UncontrolledDropdown>
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav>
-                    Support
+                    Users
                     </DropdownToggle>
                     <DropdownMenu>
-                        <Link href="/">
-                            <a className="dropdown-item">Option 1</a>
+                        <Link href="/admin/users/add">
+                            <a className="dropdown-item">Add User</a>
+                        </Link>
+                        <Link href="/admin/users/">
+                            <a className="dropdown-item">Manage Users</a>
                         </Link>
                     </DropdownMenu>
                 </UncontrolledDropdown>
@@ -62,4 +65,4 @@ const NavItems = () => {
     );
 };
 
-export default NavItems;
+export default AdminNavItems;

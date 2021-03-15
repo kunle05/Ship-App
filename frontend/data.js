@@ -13,7 +13,7 @@ function createClient({ headers, initialState }) {
         link: createHttpLink({
             uri: endPoint,
             fetchOptions: {
-                // credentials: 'include'
+                credentials: 'include'
             },
             headers
         }),

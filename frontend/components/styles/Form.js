@@ -57,6 +57,13 @@ const Form = styled.form`
         margin-top: 0;
         opacity: 1;
     }
+    .justify-content-between {
+        align-items: baseline;
+        p {
+            margin-bottom: 0;
+            font-size: 1.6rem;
+        }
+    }
     @media (max-width: 875px) {
         max-width: 90%;
     }
