@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { CURRENT_USER_QUERY } from './CurrentUser';
+import { CURRENT_USER_QUERY } from './CheckLogIn';
 
 const SIGNOUT_MUTATION = gql`
     mutation SIGNOUT_MUTATION {

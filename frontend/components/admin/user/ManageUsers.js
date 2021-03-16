@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
 import Link from 'next/link';
 import { Row, Table } from "reactstrap";
+import Pagination from "../Pagination";
 import StyledTableDiv from "../../styles/StyledTableDiv";
 
 export const USERS_QUERY = gql`
@@ -44,6 +45,7 @@ const ManageUsers = () => {
                 </Link>
             </Row>
             <div className="table-responsive">
+                <Pagination sender="user" />
                 <Table striped hover>
                     <thead>
                         <tr>

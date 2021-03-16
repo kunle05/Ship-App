@@ -78,6 +78,7 @@ const typeDefs = gql`
         users: [User]!
         user(_id: ID!) : User
         me: User
+        count(sender: String!) : Int
     }
     type Message {
         message: String!

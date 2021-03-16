@@ -45,6 +45,14 @@ const Query = {
         return ctx.User.findById(ctx.req.userId).populate({
             path: 'location'
         });
+    },
+    count: async (_, args, ctx, info) => {
+        if(args.sender == "location") {
+            return ctx.Location.countDocuments();
+        }
+        if(args.sender == "user") {
+            return ctx.User.countDocuments();
+        }
     }
 
 }

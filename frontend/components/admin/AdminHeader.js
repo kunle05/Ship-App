@@ -8,7 +8,7 @@ const AdminHeader = () => {
         <StyledHeader>
             <Navbar>
                 <Logo>
-                    <Link href="/">Ship Safe</Link>
+                    <Link href="/admin/">Ship Safe</Link>
                 </Logo>
                 <AdminNavItems />
             </Navbar>

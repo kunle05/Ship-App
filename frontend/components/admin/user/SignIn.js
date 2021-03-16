@@ -4,7 +4,8 @@ import useForm from '../../../lib/useForm';
 import Form from "../../styles/Form";
 import SafeButton from "../../styles/SafeButton";
 import SingleItemDiv from "../../styles/SingleItemDiv";
-import { CURRENT_USER_QUERY } from "./CurrentUser";
+import AdminHeader from "../AdminHeader";
+import { CURRENT_USER_QUERY } from "./CheckLogIn";
 
 const SIGN_IN_MUTATION = gql`
     mutation SIGN_IN_MUTATION($username: String!, $password: String!) {
@@ -33,6 +34,8 @@ const SignIn = () => {
     }
 
     return (
+        <>
+        <AdminHeader />
         <SingleItemDiv>
             <Container className="col-md-6">
                 <div className="title_header">
@@ -56,6 +59,7 @@ const SignIn = () => {
                 </Form>
             </Container>
         </SingleItemDiv>
+        </>
     );
 };
 
