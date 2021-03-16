@@ -6,17 +6,17 @@ const Pager = styled.tr`
     }
     svg {
         margin: 0 1.2rem;
-        height: 2rem;
+        height: 2rem !important;
         vertical-align: text-top;
     }
     input, select {
         height: 2rem;
-        width: 3.5rem;
+        width: 5rem;
+        vertical-align: text-top;
     }
     select {
         width: 6.5rem;
         margin: 0 1rem;
-        vertical-align: text-top;
     }
     .separator {
         margin: 0 1.8rem;

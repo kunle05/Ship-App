@@ -2,7 +2,11 @@ const { hasPermission } = require("../../../utils");
 
 const Query = {
     locations: async (_, args, ctx, info) => {
-        return ctx.Location.find({...args});
+        const { active, skip, limit } = args;
+        if(active) {
+            return ctx.Location.find({ active });
+        }
+        return ctx.Location.find().skip(skip).limit(limit);
     },
     location: async (_, args, ctx, info) => {
         if(!ctx.req.userId) {
@@ -24,7 +28,7 @@ const Query = {
         }
         return ctx.User.find().populate({
             path: 'location'
-        });
+        }).skip(args.skip).limit(args.limit);;
     },
     user: async (_, args, ctx, info) => {
         if(!ctx.req.userId) {
@@ -47,10 +51,10 @@ const Query = {
         });
     },
     count: async (_, args, ctx, info) => {
-        if(args.sender == "location") {
+        if(args.sender == "locations") {
             return ctx.Location.countDocuments();
         }
-        if(args.sender == "user") {
+        if(args.sender == "users") {
             return ctx.User.countDocuments();
         }
     }

@@ -48,14 +48,23 @@ const Form = styled.form`
             width: 2rem;
         }
     }
-    svg, .close {
-        height: 2rem;
-        font-size: 2rem;
-        line-height: 3.6rem;
-        margin-right: .8rem;
-        color: var(--red);
-        margin-top: 0;
-        opacity: 1;
+    .notify {
+        background: var(--bgBlue);
+        margin: 0;
+        padding: 1.5rem;
+        border-radius: .5rem;
+        margin-bottom: 2rem;
+        align-items: center;
+        svg {
+            height: 5rem;
+            color: var(--blue);
+            margin-right: 2rem;
+        }
+        p {
+            margin-bottom: .5rem;
+            line-height: 2.2rem;
+            color: var(--blue);
+        }
     }
     .justify-content-between {
         align-items: baseline;
@@ -69,6 +78,19 @@ const Form = styled.form`
     }
     @media (max-width: 600px) {
         max-width: 100%;
+    }
+    @media (max-width: 380px) {
+        padding: 1rem;
+        .notify {
+            padding: .5rem;
+            svg {
+                height: 3rem;
+            }
+            p {
+                font-size: 1.6rem;
+                margin-bottom: 0
+            }
+        }
     }
 `;
 

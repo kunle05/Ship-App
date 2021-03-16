@@ -20,11 +20,16 @@ const UPDATE_LOCATION = gql`
     }
 `;
 
-const ManageLocations = () => {
+const ManageLocations = ({ page, limit }) => {
     const { data: { me } } = useQuery(CURRENT_USER_QUERY);
 
     const [newMode, setNewMode] = useState(false);
-    const { loading, error, data } = useQuery(LOCATIONS_QUERY);
+    const { loading, error, data } = useQuery(LOCATIONS_QUERY, {
+        variables: {
+            skip: limit * page - limit,
+            limit: limit 
+        }
+    });
     const [updateLocation, { loading: updateLoading }] = useMutation(UPDATE_LOCATION);
     const update = id => {
         updateLocation({ variables: { _id: id } });
@@ -53,7 +58,7 @@ const ManageLocations = () => {
                     <SafeButton onClick={toggle}><FontAwesomeIcon icon="plus" /> New Location</SafeButton>
                 </Row>
                 <div className="table-responsive">
-                    <Pagination sender="location" />
+                    <Pagination sender="locations" page={page} limit={limit} />
                     <Table striped hover>
                         <thead>
                             <tr>

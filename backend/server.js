@@ -24,9 +24,26 @@ app.use(cors({
 
 app.use((req, res, next) => {
     const { token } = req.cookies;
+    const now = new Date();
+
     if(token) {
-        const { userId } = jwt.verify(token, process.env.APP_SECRET);
+        const { userId, lastLogin } = jwt.verify(token, process.env.APP_SECRET);
         req.userId = userId;
+
+        // if(now > new Date(lastLogin) + 2700000) {
+        //     //new token
+        //     const token = jwt.sign({
+        //         userId: userId,
+        //         lastLogin: now
+        //     }, process.env.APP_SECRET);
+
+        //     res.cookie('token', token, {
+        //         httpOnly: true,
+        //         maxAge: 1000 * 60 * 60  //1hour cookie
+        //     });
+        // }
+
+        // console.log(new Date() - new Date(lastLogin));
     };
     next();
 }) 

@@ -73,9 +73,9 @@ const typeDefs = gql`
     }
 
     type Query {
-        locations(active: Boolean) : [Location]!
+        locations(active: Boolean, skip: Int, limit: Int) : [Location]!
         location(_id: ID!) : Location
-        users: [User]!
+        users(skip: Int, limit: Int): [User]!
         user(_id: ID!) : User
         me: User
         count(sender: String!) : Int

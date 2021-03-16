@@ -7,8 +7,8 @@ import Pagination from "../Pagination";
 import StyledTableDiv from "../../styles/StyledTableDiv";
 
 export const USERS_QUERY = gql`
-    query USERS_QUERY {
-        users {
+    query USERS_QUERY($skip: Int, $limit: Int) {
+        users(skip: $skip, limit: $limit) {
             _id
             firstname
             lastname
@@ -25,7 +25,7 @@ export const USERS_QUERY = gql`
     }
 `;
 
-const ManageUsers = () => {
+const ManageUsers = ({ page, limit }) => {
     const { loading, error, data } = useQuery(USERS_QUERY);
     if(loading) return <p>loading</p>
     if(error) return <p>{ error.message }</p>
@@ -45,7 +45,7 @@ const ManageUsers = () => {
                 </Link>
             </Row>
             <div className="table-responsive">
-                <Pagination sender="user" />
+                <Pagination sender="users" page={page} limit={limit} />
                 <Table striped hover>
                     <thead>
                         <tr>

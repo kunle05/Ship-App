@@ -107,13 +107,15 @@ const Mutation = {
         if(!valid) {
             throw new Error("The login information provided is incorrect");
         }
-        
-        const token = jwt.sign({
-            userId: user._id
-        }, process.env.APP_SECRET);
-        
+
         user.lastLogin = new Date();
         user = await user.save(); 
+        
+        const token = jwt.sign({
+            userId: user._id,
+            lastLogin: user.lastLogin
+        }, process.env.APP_SECRET);
+        
 
         ctx.res.cookie('token', token, {
             httpOnly: true,

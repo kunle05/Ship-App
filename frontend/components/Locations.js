@@ -4,8 +4,8 @@ import { Card, CardImg, CardBody, Row, CardTitle, CardSubtitle, CardText, Button
 import StyledLocation from "./styles/StyledLocation";
 
 export const LOCATIONS_QUERY = gql`
-    query LOCATIONS_QUERY($active: Boolean) {
-        locations(active: $active) {
+    query LOCATIONS_QUERY($active: Boolean, $skip: Int, $limit: Int) {
+        locations(active: $active, skip: $skip, limit: $limit) {
             _id
             photo
             city
