@@ -76,6 +76,11 @@ const Form = styled.form`
     .safelink {
         color: var(--blue);
         font-size: 1.6rem;
+        svg {
+            height: 1.7rem;
+            vertical-align: text-bottom;
+            margin-right: .5rem;
+        }
     }
     @media (max-width: 875px) {
         max-width: 90%;

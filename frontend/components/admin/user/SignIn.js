@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Container, FormGroup, Label, Input } from 'reactstrap';
 import useForm from '../../../lib/useForm';
@@ -76,7 +77,9 @@ const SignIn = () => {
                             <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
                         </FormGroup>
                         <div className="d-flex justify-content-between">
-                            <a className="safelink" onClick={() => setMode({login: true, password: false})}>Back to Login</a>
+                            <a className="safelink" onClick={() => setMode({login: true, password: false})}>
+                                <FontAwesomeIcon icon="angle-double-left" />
+                                Back to Login</a>
                             <SafeButton type="submit">Submit{loading ? 'ting' : null}!</SafeButton>
                         </div>
                     </fieldset>
