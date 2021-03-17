@@ -1,8 +1,10 @@
 import { gql, useMutation } from "@apollo/client";
-import { FormGroup, Input, Label } from "reactstrap";
+import { Container, FormGroup, Input, Label } from "reactstrap";
+import AdminHeader from "./AdminHeader";
 import useForm from "../../lib/useForm";
 import Form from "../styles/Form";
 import SafeButton from "../styles/SafeButton";
+import SingleItemDiv from "../styles/SingleItemDiv";
 
 const RESET_PW_MUTATION = gql`
     mutation RESET_PW_MUTATION($token: String!, $password: String!, $confirmPassword: String!) {
@@ -25,25 +27,36 @@ const PasswordReset = ({ token }) => {
     });
 
     return (
-        <Form method="POST" onSubmit={async e => {
-            e.preventDefault();
-            await beginReset();
-            resetForm();
-        }}>
-            <fieldset disabled={loading} aria-busy={loading}>
-                <FormGroup>
-                    <Label for="password"><b>New Password</b></Label>
-                    <Input type="password" name="password" value={formData.password} onChange={handleChange} required />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="confirmPassword"><b>Confirm Password</b></Label>
-                    <Input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
-                </FormGroup>
-                <div className="d-flex justify-content-end">
-                    <SafeButton type="submit">Submit</SafeButton>
+        <>
+        <AdminHeader />
+        <SingleItemDiv>
+            <Container className="col-md-6">
+                <div className="title_header">
+                    <h2>Create new password!</h2>
+                    <p>Password must be a minimum of eight characters with at least one number and one letter.</p>
                 </div>
-            </fieldset>
-        </Form>
+                <Form method="POST" onSubmit={async e => {
+                    e.preventDefault();
+                    await beginReset();
+                    resetForm();
+                }}>
+                    <fieldset disabled={loading} aria-busy={loading}>
+                        <FormGroup>
+                            <Label for="password"><b>New Password</b></Label>
+                            <Input type="password" name="password" value={formData.password} onChange={handleChange} required />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="confirmPassword"><b>Confirm Password</b></Label>
+                            <Input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+                        </FormGroup>
+                        <div className="d-flex justify-content-end">
+                            <SafeButton type="submit">Submit</SafeButton>
+                        </div>
+                    </fieldset>
+                </Form>
+            </Container>
+        </SingleItemDiv>
+        </>
     );
 };
 

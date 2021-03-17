@@ -27,11 +27,11 @@ const StyledNavItems = styled.div`
 `;
 
 const AdminNavItems = () => {
-    const { data: { me } } = useQuery(CURRENT_USER_QUERY);
+    const { data } = useQuery(CURRENT_USER_QUERY);
 
     return (
         <StyledNavItems>
-            { me && 
+            { data?.me && 
                 <Nav>
                     <UncontrolledDropdown nav inNavbar>
                         <DropdownToggle nav>
@@ -43,14 +43,14 @@ const AdminNavItems = () => {
                             </Link>
                         </DropdownMenu>
                     </UncontrolledDropdown>
-                    { me.permissions.includes("ADMIN") && <>
+                    { data.me.permissions.includes("ADMIN") && <>
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav>
                             Locations
                             </DropdownToggle>
                             <DropdownMenu>
                                 <Link href="/admin/locations/">
-                                    <a className="dropdown-item">{ me.permissions.includes("ADMIN") ? "Manage Locations" : "All Locations" }</a>
+                                    <a className="dropdown-item">{ data.me.permissions.includes("ADMIN") ? "Manage Locations" : "All Locations" }</a>
                                 </Link>
                             </DropdownMenu>
                         </UncontrolledDropdown>
@@ -70,8 +70,8 @@ const AdminNavItems = () => {
                     </> }
                     <UncontrolledDropdown nav inNavbar>
                         <DropdownToggle nav>
-                            <img className="rounded-circle mr-2" src={me.photo || "/static/person.png"} alt={me.username} height="25" />
-                            Hi, {me.firstname}!
+                            <img className="rounded-circle mr-2" src={data.me.photo || "/static/person.png"} alt={data.me.username} height="25" />
+                            Hi, {data.me.firstname}!
                         </DropdownToggle>
                         <DropdownMenu>
                             <Link href="/admin/users/account">

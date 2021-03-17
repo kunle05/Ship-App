@@ -15,7 +15,7 @@ const makeEmail = (email, text, home) => `
             <a href="${home}" style="background: #002f60; color: white; padding: 8px 15px; text-decoration: none; text-transform: uppercase;">Ship Safe</a>
         </h1>
         <div style="max-width: 640px;">
-            <table style="width: 100%; border-radius: 10px; background: white; padding: 50px; border-radius: 10px;">
+            <table style="width: 100%; border-radius: 10px; background: white; padding: 8%; border-radius: 10px;">
                 <tbody>
                     <tr>
                         <td>

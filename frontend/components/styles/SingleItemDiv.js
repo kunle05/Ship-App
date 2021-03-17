@@ -2,9 +2,13 @@ import styled from 'styled-components';
 
 const SingleItemDiv = styled.div`
     padding: 4rem;
+    .col-md-6 {
+        box-shadow: var(--bs);
+    }
     .title_header {
         border-bottom: 1px solid var(--lightGrey);
         margin-bottom: 3rem;
+        padding: 3rem 3rem 0;
         h2 {
             font-size: 3rem;
             font-weight: bold;
@@ -54,6 +58,9 @@ const SingleItemDiv = styled.div`
         }
         .col-md-6 {
             max-width: 100%;
+        }
+        .title_header {
+            padding: 0;
         }
     }
 `;

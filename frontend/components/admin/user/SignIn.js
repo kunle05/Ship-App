@@ -82,8 +82,8 @@ const SignIn = () => {
 
             { mode.password && <Container className="col-md-6">
                 <div className="title_header">
-                    <h2>Reset Password</h2>
-                    <p>Password reset instructions will be emailed to the address entered below.</p>
+                    <h2>Forgotten your Password?</h2>
+                    <p>Please enter your ShipSafe email address, and password reset instructions will be emailed you.</p>
                 </div>
                 <Form method="POST" onSubmit={handleResetSubmit}>
                     { data?.requestReset.message && <Row className="notify">

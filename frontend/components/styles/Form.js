@@ -12,7 +12,7 @@ const loading = keyframes`
 const Form = styled.form`
     margin-top: 3rem;
     padding: 3rem;
-    box-shadow: var(--bs);
+    /* box-shadow: var(--bs); */
     fieldset {
         &:before {
             height: 10px;

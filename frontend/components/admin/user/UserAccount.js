@@ -1,10 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Row } from 'reactstrap';
 import { CURRENT_USER_QUERY } from "./CheckLogIn";
-import PasswordReset from "./PasswordReset";
+import ChangePassword from "./ChangePassword";
 import EditUser from "./EditUser";
 import SingleItemDiv from "../../styles/SingleItemDiv";
 import SafeButton from "../../styles/SafeButton";
@@ -58,7 +57,7 @@ const UserAccount = () => {
                     </Container>
                 </div>
                 { mode.editMode && <EditUser user={me} /> }
-                { mode.passwordMode && <PasswordReset resetMode={showDefault} id={me._id} /> }
+                { mode.passwordMode && <ChangePassword resetMode={showDefault} id={me._id} /> }
             </Container>
         </SingleItemDiv>
     );
