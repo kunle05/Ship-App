@@ -137,7 +137,7 @@ const Mutation = {
 
         user.resetTokenExpiry = Date.now() + 3600000;  //1hr from now
         user.resetToken = resetToken;
-        user.save();
+        await user.save();
 
         const link = `${process.env.FRONTEND_URL}/admin/resetpassword?resetToken=${resetToken}`;
 
@@ -163,7 +163,7 @@ const Mutation = {
         user.password = password;
         user.resetToken = null;
         user.resetTokenExpiry = null; 
-        user.save();
+        await user.save();
         return {message: "Reset Succesful"};
     }
 }
