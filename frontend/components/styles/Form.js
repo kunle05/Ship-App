@@ -73,6 +73,10 @@ const Form = styled.form`
             font-size: 1.6rem;
         }
     }
+    .safelink {
+        color: var(--blue);
+        font-size: 1.6rem;
+    }
     @media (max-width: 875px) {
         max-width: 90%;
     }

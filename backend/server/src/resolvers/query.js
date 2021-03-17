@@ -1,4 +1,5 @@
-const { hasPermission } = require("../../../utils");
+const jwt = require('jsonwebtoken');
+const { hasPermission } = require("../../../utils")
 
 const Query = {
     locations: async (_, args, ctx, info) => {

@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import { useState } from "react";
 import { Container, FormGroup, Label, Input } from 'reactstrap';
 import useForm from '../../../lib/useForm';
 import Form from "../../styles/Form";
@@ -16,6 +17,10 @@ const SIGN_IN_MUTATION = gql`
 `;
 
 const SignIn = () => {
+    const [mode, setMode] = useState({
+        login: true,
+        password: false
+    });
     const { formData, handleChange, resetForm } = useForm({
         username: "",
         password: ""
@@ -37,7 +42,7 @@ const SignIn = () => {
         <>
         <AdminHeader />
         <SingleItemDiv>
-            <Container className="col-md-6">
+            { mode.login && <Container className="col-md-6">
                 <div className="title_header">
                     <h2>Sign in to your account!</h2>
                 </div>
@@ -52,12 +57,31 @@ const SignIn = () => {
                             <Input type="password" name="password" value={formData.password} onChange={handleChange} required />
                         </FormGroup>
                         <div className="d-flex justify-content-between">
-                            <p>Reset Password</p>
+                            <a className="safelink" onClick={() => setMode({login: false, password: true})}>Reset Password</a>
                             <SafeButton type="submit">Log{loading ? 'ging' : null} In!</SafeButton>
                         </div>
                     </fieldset>
                 </Form>
-            </Container>
+            </Container> }
+
+            { mode.password && <Container className="col-md-6">
+                <div className="title_header">
+                    <h2>Reset Password</h2>
+                    <p>Password reset instructions will be emailed to the address entered below.</p>
+                </div>
+                <Form method="POST" onSubmit={handleSubmit}>
+                    <fieldset disabled={loading} aria-busy={loading}>
+                        <FormGroup>
+                            <Label for="email">Email</Label>
+                            <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                        </FormGroup>
+                        <div className="d-flex justify-content-between">
+                            <a className="safelink" onClick={() => setMode({login: true, password: false})}>Back to Login</a>
+                            <SafeButton type="submit">Submit{loading ? 'ting' : null}!</SafeButton>
+                        </div>
+                    </fieldset>
+                </Form>
+            </Container>}
         </SingleItemDiv>
         </>
     );
