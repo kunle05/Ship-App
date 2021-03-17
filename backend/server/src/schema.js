@@ -94,6 +94,8 @@ const typeDefs = gql`
         changeUserPass(_id: ID!, password: String!, confirmPassword: String!) : User!
         signIn(username: String!, password: String!) : User
         signOut: Message
+        requestReset(email: String!): Message
+        resetPassword(token: String!, password: String!, confirmPassword: String!) : Message
     }
 `;
 

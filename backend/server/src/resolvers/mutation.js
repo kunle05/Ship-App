@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { matchPassword, hasPermission }= require("../../../utils");
+const crypto = require('crypto')
+const { matchPassword, hasPermission }= require("../utils");
+const { transport, makeEmail } = require('../mail');
 
 const Mutation = {
     newLocation: async (parent, args, ctx, info) => {
@@ -124,8 +126,46 @@ const Mutation = {
     signOut: (_, args, ctx, info) => {
         ctx.res.clearCookie('token');
         return { message: "You have successfully signed out"}
-    }
+    },
+    requestReset: async (_, { email }, ctx, info) => {
+        let user = await ctx.User.findOne({ email });
+        if(!user) {
+            throw new Error("Couldn't find your email account");
+        }
 
+        let resetToken = await crypto.randomBytes(20).toString('hex');
+
+        user.resetTokenExpiry = Date.now() + 3600000;  //1hr from now
+        user.resetToken = resetToken;
+        user.save();
+
+        const link = `${process.env.FRONTEND_URL}/admin/resetpassword?resetToken=${resetToken}`;
+
+        const mailRes = await transport.sendMail({
+            from: 'noreply@shipsafe.com',
+            to: user.email,
+            subject: 'Password Reset Request',
+            html: makeEmail(user.email, link, process.env.FRONTEND_URL)
+        });
+        return {message: "Token set"};
+    },
+    resetPassword: async (_, args, ctx, info) => {
+        const { token } = args;
+        if(!token) {
+            throw new Error("Token is either invalid or expired!");
+        }
+        matchPassword(args);
+        const [user] = await ctx.User.where('resetToken', token).where('resetTokenExpiry').gte(Date.now());
+        if(!user) {
+            throw new Error("Token is either invalid or expired!");
+        }
+        const password = await bcrypt.hash(args.password, 10);
+        user.password = password;
+        user.resetToken = null;
+        user.resetTokenExpiry = null; 
+        user.save();
+        return {message: "Reset Succesful"};
+    }
 }
 
 module.exports = Mutation

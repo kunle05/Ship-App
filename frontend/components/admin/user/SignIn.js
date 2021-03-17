@@ -1,7 +1,7 @@
 import { gql, useMutation } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { Container, FormGroup, Label, Input } from 'reactstrap';
+import { Container, FormGroup, Label, Input, Row } from 'reactstrap';
 import useForm from '../../../lib/useForm';
 import Form from "../../styles/Form";
 import SafeButton from "../../styles/SafeButton";
@@ -17,6 +17,14 @@ const SIGN_IN_MUTATION = gql`
     }
 `;
 
+const REQUEST_RESET_MUTATION = gql`
+    mutation REQUEST_RESET_MUTATION($email: String!) {
+        requestReset(email: $email) {
+            message
+        }
+    }
+`;
+
 const SignIn = () => {
     const [mode, setMode] = useState({
         login: true,
@@ -24,7 +32,8 @@ const SignIn = () => {
     });
     const { formData, handleChange, resetForm } = useForm({
         username: "",
-        password: ""
+        password: "",
+        email: ""
     });
     const [login, {loading, error}] = useMutation(SIGN_IN_MUTATION, { 
         variables: formData, 
@@ -32,11 +41,17 @@ const SignIn = () => {
             query: CURRENT_USER_QUERY
         }] 
     });
+    const [sendRequest, {loading : resetLoading, data}] = useMutation(REQUEST_RESET_MUTATION, { variables: {email: formData.email} });
 
     const handleSubmit = async e => {
         e.preventDefault();
         await login();
         resetForm();
+    }
+
+    const handleResetSubmit = async e => {
+        e.preventDefault();
+        await sendRequest();
     }
 
     return (
@@ -70,8 +85,15 @@ const SignIn = () => {
                     <h2>Reset Password</h2>
                     <p>Password reset instructions will be emailed to the address entered below.</p>
                 </div>
-                <Form method="POST" onSubmit={handleSubmit}>
-                    <fieldset disabled={loading} aria-busy={loading}>
+                <Form method="POST" onSubmit={handleResetSubmit}>
+                    { data?.requestReset.message && <Row className="notify">
+                        <FontAwesomeIcon icon="check-circle" />
+                        <div>
+                            <p>Success!</p>
+                            <p>Check your email for password reset instructions.</p>
+                        </div>
+                    </Row>}
+                    <fieldset disabled={resetLoading || data?.requestReset.message} aria-busy={resetLoading || data?.requestReset.message}>
                         <FormGroup>
                             <Label for="email">Email</Label>
                             <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
@@ -79,8 +101,9 @@ const SignIn = () => {
                         <div className="d-flex justify-content-between">
                             <a className="safelink" onClick={() => setMode({login: true, password: false})}>
                                 <FontAwesomeIcon icon="angle-double-left" />
-                                Back to Login</a>
-                            <SafeButton type="submit">Submit{loading ? 'ting' : null}!</SafeButton>
+                                Back to Login
+                            </a>
+                            <SafeButton type="submit">Request{resetLoading ? 'ing' : null} Reset!</SafeButton>
                         </div>
                     </fieldset>
                 </Form>

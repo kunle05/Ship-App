@@ -15,7 +15,7 @@ const CHANGE_USER_PASS = gql`
     }
 `;
 
-const PasswordReset = ({resetMode, id}) => {
+const ChangePassword = ({resetMode, id}) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [changePassword, { loading }] = useMutation(CHANGE_USER_PASS, {variables: {
@@ -56,4 +56,4 @@ const PasswordReset = ({resetMode, id}) => {
     );
 };
 
-export default PasswordReset;
+export default ChangePassword;

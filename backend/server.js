@@ -29,13 +29,13 @@ app.use((req, res, next) => {
         req.userId = userId;
     };
     next();
-}) 
+}); 
 
 const server = new ApolloServer({
     typeDefs,
     resolvers: { Query, Mutation },
     context: (req) => ({ ...req, Location, User })
-})
+});
 
 server.applyMiddleware({ app, path: '/', cors: false });
 

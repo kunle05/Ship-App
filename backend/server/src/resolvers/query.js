@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { hasPermission } = require("../../../utils")
+const { hasPermission } = require("../utils")
 
 const Query = {
     locations: async (_, args, ctx, info) => {
@@ -29,7 +29,7 @@ const Query = {
         }
         return ctx.User.find().populate({
             path: 'location'
-        }).skip(args.skip).limit(args.limit);;
+        }).skip(args.skip).limit(args.limit);
     },
     user: async (_, args, ctx, info) => {
         if(!ctx.req.userId) {
@@ -59,7 +59,6 @@ const Query = {
             return ctx.User.countDocuments();
         }
     }
-
 }
 
 module.exports = Query

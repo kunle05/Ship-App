@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Row } from 'reactstrap';
-import PasswordReset from "./PasswordReset";
+import ChangePassword from "./ChangePassword";
 import Permission from "./Permission";
 import SafeButton from "../../styles/SafeButton";
 import SingleItemDiv from "../../styles/SingleItemDiv";
@@ -95,7 +95,7 @@ const ASingleUser = ({id}) => {
                     </Container>
                 </div>
                 { mode.editMode && <EditUser user={user} /> }
-                { mode.passwordMode && <PasswordReset resetMode={showDefault} id={user._id} /> }
+                { mode.passwordMode && <ChangePassword resetMode={showDefault} id={user._id} /> }
                 { mode.permissionMode && <Permission resetMode={showDefault} user={user} /> }                
             </Container>
         </SingleItemDiv>
