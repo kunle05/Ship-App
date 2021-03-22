@@ -2,13 +2,11 @@ import { useQuery, gql, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { Row, Table } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
 import { format } from 'date-fns';
 import { LOCATIONS_QUERY } from '../../Locations'; 
 import { CURRENT_USER_QUERY } from '../user/CheckLogIn';
 import StyledTableDiv from '../../styles/StyledTableDiv';
 import SafeButton from "../../styles/SafeButton";
-import AddLocation from './AddLocation';
 import Pagination from '../Pagination';
 
 const UPDATE_LOCATION = gql`
@@ -22,8 +20,6 @@ const UPDATE_LOCATION = gql`
 
 const ManageLocations = ({ page, limit }) => {
     const { data: { me } } = useQuery(CURRENT_USER_QUERY);
-
-    const [newMode, setNewMode] = useState(false);
     const { loading, error, data } = useQuery(LOCATIONS_QUERY, {
         variables: {
             skip: limit * page - limit,
@@ -34,18 +30,9 @@ const ManageLocations = ({ page, limit }) => {
     const update = id => {
         updateLocation({ variables: { _id: id } });
     }
-    const toggle = () => {
-        setNewMode(!newMode);
-    }
 
     if(loading) return <p>loading</p>
     if(error) return <p>{ error.message }</p>
-
-    if(newMode) {
-        return (
-            <AddLocation toggle={toggle} />
-        )
-    }
 
     return (
         <StyledTableDiv>
@@ -55,7 +42,12 @@ const ManageLocations = ({ page, limit }) => {
                         <h2>Locations Manager</h2>
                         <p>Create, edit and disable locations</p>
                     </div>
-                    <SafeButton onClick={toggle}><FontAwesomeIcon icon="plus" /> New Location</SafeButton>
+                    <Link href="/admin/locations/add">
+                        <a className="btn">
+                            <FontAwesomeIcon icon="plus" /> 
+                            New Location
+                        </a>
+                    </Link>
                 </Row>
                 <div className="table-responsive">
                     <Pagination sender="locations" page={page} limit={limit} />
@@ -75,8 +67,8 @@ const ManageLocations = ({ page, limit }) => {
                         <tbody className="table-bordered">
                             { data.locations.map(location => (
                                 <tr key={location._id}>
-                                    <td>
-                                        <img src={location.photo || "/static/photodefault.jpg"} alt={location.city} height="30" />
+                                    <td style={{width: '55px'}}>
+                                        <img src={location.photo || "/static/photodefault.jpg"} alt={location.city} width="50" />
                                     </td>
                                     <td>
                                         <Link href={`/admin/locations/${location._id}`}>

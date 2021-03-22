@@ -26,7 +26,12 @@ export const USERS_QUERY = gql`
 `;
 
 const ManageUsers = ({ page, limit }) => {
-    const { loading, error, data } = useQuery(USERS_QUERY);
+    const { loading, error, data } = useQuery(USERS_QUERY, {
+        variables: {
+            skip: limit * page - limit,
+            limit: limit 
+        }
+    });
     if(loading) return <p>loading</p>
     if(error) return <p>{ error.message }</p>
 
@@ -63,8 +68,8 @@ const ManageUsers = ({ page, limit }) => {
                         { data.users.map(user => (
                             <Link href={`/admin/users/${user._id}`} key={user._id}>
                                 <tr className="clickable">
-                                    <td>
-                                        <img src={user.photo || '/static/photodefault.jpg'} alt={user.username} height="30" />
+                                    <td style={{width: '55px'}}>
+                                        <img src={user.photo || '/static/photodefault.jpg'} alt={user.username} width="50" />
                                     </td>
                                     <td>{user.username}</td>
                                     <td>{`${user.firstname} ${user.lastname}`}</td>

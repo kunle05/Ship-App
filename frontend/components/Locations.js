@@ -1,6 +1,6 @@
 import { useQuery, gql } from '@apollo/client';
 import Head from 'next/head';
-import { Card, CardImg, CardBody, Row, CardTitle, CardSubtitle, CardText, Button, Container, Col } from 'reactstrap';
+import { Card, CardImg, CardBody, Row, CardTitle, CardSubtitle, CardText, Container, Col } from 'reactstrap';
 import StyledLocation from "./styles/StyledLocation";
 
 export const LOCATIONS_QUERY = gql`
@@ -19,7 +19,6 @@ export const LOCATIONS_QUERY = gql`
         }
     }
 `;
-
 
 const Location = () => {
     const { loading, error, data } = useQuery(LOCATIONS_QUERY, { variables: { active: true } });

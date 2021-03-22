@@ -37,10 +37,24 @@ const SingleItemDiv = styled.div`
         }
         h3 {
             font-size: 2.4rem;
-            margin-bottom: 2rem;
+            margin: 1rem 1.5rem;
         }
         button {
             margin-top: 2.5rem;
+        }
+        img {
+            object-fit: fill;
+        }
+        svg {
+            height: 2rem;
+            color: var(--blue);
+            position: absolute;
+            top: 255px;
+        }
+        img:hover, svg:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+            transition: all 0.5s;
         }
     }
     @media (max-width: 1025px) {

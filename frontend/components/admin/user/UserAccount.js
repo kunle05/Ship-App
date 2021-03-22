@@ -1,20 +1,31 @@
-import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Row } from 'reactstrap';
 import { CURRENT_USER_QUERY } from "./CheckLogIn";
+import EditUser, { EDIT_USER } from "./EditUser";
+import { USERS_QUERY } from "./ManageUsers";
 import ChangePassword from "./ChangePassword";
-import EditUser from "./EditUser";
 import SingleItemDiv from "../../styles/SingleItemDiv";
 import SafeButton from "../../styles/SafeButton";
+import useForm from "../../../lib/useForm";
 
 const UserAccount = () => {
+    const { formData, handleChange, resetForm} = useForm({photo: ""});
     const [ mode, setMode ] = useState({
         editMode: true,
         passwordMode: false,
     });
-
     const { loading, data } = useQuery(CURRENT_USER_QUERY);
+    const [savePhoto] = useMutation(EDIT_USER, { 
+        variables: {
+            id: data?.me._id,
+            ...formData
+        },
+        refetchQueries: [{query: USERS_QUERY}]  
+    });
+    let inputElement = useRef(null);
+
     if(loading) return <p>loading...</p>
     if(!data.me) return null;
     const { me } = data;
@@ -24,6 +35,13 @@ const UserAccount = () => {
             editMode: true,
             passwordMode: false,
         })
+    }
+    const saveImgToDB = async () => {
+        await savePhoto();
+        resetForm();
+    }
+    if(formData.photo) {
+        saveImgToDB();
     }
     
     return (
@@ -38,7 +56,9 @@ const UserAccount = () => {
                     <p>Change your name, username or login password.</p>
                 </div>
                 <div className="text-center">
-                    <img className="rounded-circle" src={me.photo || '/static/person.png'} alt={me.username} width="150" height="150" />
+                    <img className="rounded-circle" src={me.photo || '/static/person.png'} alt={me.username} width="150" height="150" onClick={e => inputElement.click()} />
+                    <FontAwesomeIcon icon="edit" onClick={e => inputElement.click()} />
+                    <input type="file" name="photo" onChange={handleChange} style={{display: 'none'}} ref={(input) => inputElement = input} />
                     <h3>{`${me.firstname} ${me.lastname}`}</h3>
                     <p className="info">{me.email}</p>
                     <Container className="col-md-8">

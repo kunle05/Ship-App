@@ -7,7 +7,7 @@ import { Table } from 'reactstrap';
 import { defaultLimit } from '../../config';
 import Pager from '../styles/Pager';
 
-const PAGINATION_QUERY = gql`
+export const PAGINATION_QUERY = gql`
     query PAGINATION_QUERY($sender: String!) {
         count(sender: $sender) 
     }
@@ -41,6 +41,7 @@ const Pagination = ({ sender, page, limit }) => {
                 setShowPage(1);
             }
             setPageLimit(value);
+            router.push(`/admin/${sender}?page=${showPage}&limit=${value}`);
         }
     }
 
@@ -86,11 +87,11 @@ const Pagination = ({ sender, page, limit }) => {
                         of {pages} pages 
                         <span className="separator">|</span>
                         View
-                        <select name="limit" value={pageLimit} onChange={handleChange} onBlur={makeRequest} onKeyUp={handleKeyPress}>
-                                <option value={defaultLimit}> {defaultLimit} </option>
-                                <option value={defaultLimit * 2}> {defaultLimit * 2} </option>
-                                <option value={defaultLimit * 3}> {defaultLimit * 3} </option>
-                                <option value={defaultLimit * 5}> {defaultLimit * 5} </option>
+                        <select name="limit" value={pageLimit} onChange={handleChange}>
+                            <option value={defaultLimit}> {defaultLimit} </option>
+                            <option value={defaultLimit * 2}> {defaultLimit * 2} </option>
+                            <option value={defaultLimit * 3}> {defaultLimit * 3} </option>
+                            <option value={defaultLimit * 5}> {defaultLimit * 5} </option>
                         </select>
                         per page 
                         <span className="separator">|</span>

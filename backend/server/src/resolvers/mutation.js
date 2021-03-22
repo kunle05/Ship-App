@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto')
+const crypto = require('crypto');
 const { matchPassword, hasPermission }= require("../utils");
 const { transport, makeEmail } = require('../mail');
 

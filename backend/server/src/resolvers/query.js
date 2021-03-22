@@ -29,7 +29,7 @@ const Query = {
         }
         return ctx.User.find().populate({
             path: 'location'
-        }).skip(args.skip).limit(args.limit);
+        }).skip(args.skip).limit(args.limit).sort('username');
     },
     user: async (_, args, ctx, info) => {
         if(!ctx.req.userId) {

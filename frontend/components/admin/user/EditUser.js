@@ -8,8 +8,8 @@ import Form from "../../styles/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const EDIT_USER = gql`
-    mutation EDIT_USER($id: ID!, $username: String, $firstname: String, $lastname: String, $email: String, $permissions: [Permission]) {
-        editUser(_id: $id, username: $username, firstname: $firstname, lastname: $lastname, email: $email, permissions: $permissions) {
+    mutation EDIT_USER($id: ID!, $username: String, $firstname: String, $lastname: String, $email: String, $photo: String $permissions: [Permission]) {
+        editUser(_id: $id, username: $username, firstname: $firstname, lastname: $lastname, email: $email, photo: $photo, permissions: $permissions) {
             _id
             permissions
             updatedAt
@@ -24,9 +24,6 @@ const EditUser = ({ user }) => {
         refetchQueries: [{query: USERS_QUERY}] 
     });
     const router = useRouter();
-    if(data) {
-        console.log("na success");
-    }
     
     return (
         <Form method="POST" onSubmit={async e => {

@@ -1,7 +1,7 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { withApollo } from "next-with-apollo";
 import { getDataFromTree } from '@apollo/client/react/ssr';
-import { endPoint } from "./config";
+import { endPoint } from "../config";
 
 function createClient({ headers, initialState }) {
     const cache = new InMemoryCache({

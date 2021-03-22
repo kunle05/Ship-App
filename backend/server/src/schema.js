@@ -71,7 +71,6 @@ const typeDefs = gql`
         createdAt: Date
         updatedAt: Date
     }
-
     type Query {
         locations(active: Boolean, skip: Int, limit: Int) : [Location]!
         location(_id: ID!) : Location
@@ -85,12 +84,12 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        newLocation(city: String!, address: String!, description: String, phone: String, email: String) : Location!
+        newLocation(city: String!, address: String!, description: String, phone: String, email: String, photo: String) : Location!
         updateLocation(_id: ID!) : Location!
-        editLocation(_id: ID!, city: String, address: String, description: String, phone: String, email: String) : Location!
+        editLocation(_id: ID!, photo: String, city: String, address: String, description: String, phone: String, email: String) : Location!
         newUser(firstname: String!, lastname: String!, username: String!, email: String!, password: String!, confirmPassword: String! location: ID!) : User
         updateUser(_id: ID!) : User!
-        editUser(_id: ID!, username: String, firstname: String, lastname: String, email: String, permissions: [Permission]) : User!
+        editUser(_id: ID!, username: String, firstname: String, lastname: String, email: String, photo: String, permissions: [Permission]) : User!
         changeUserPass(_id: ID!, password: String!, confirmPassword: String!) : User!
         signIn(username: String!, password: String!) : User
         signOut: Message

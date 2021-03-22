@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, FormGroup, Label, Input } from 'reactstrap';
 import { LOCATIONS_QUERY } from '../../Locations'; 
+import { PAGINATION_QUERY } from "../Pagination";
 import SingleItemDiv from "../../styles/SingleItemDiv";
 import SafeButton from "../../styles/SafeButton";
 import useForm from "../../../lib/useForm";
@@ -54,7 +55,10 @@ const AddUser = () => {
                     }
                 }
             });
-        } 
+        },
+        refetchQueries: [
+            {query: PAGINATION_QUERY, variables: {sender: 'users'}}
+        ] 
     })
 
     const handleSubmit = async e => {

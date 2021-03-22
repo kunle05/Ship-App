@@ -1,26 +1,31 @@
 import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/dist/client/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Container, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { PAGINATION_QUERY } from "../Pagination";
+import Link from "next/link";
 import SingleItemDiv from "../../styles/SingleItemDiv";
 import SafeButton from "../../styles/SafeButton";
 import useForm from "../../../lib/useForm";
 import Form from "../../styles/Form";
 
 const CREATE_LOCATION_MUTATION = gql`
-    mutation CREATE_LOCATION_MUTATION($city: String!, $address: String!, $description: String, $phone: String, $email: String) {
-        newLocation(city: $city, address: $address, description: $description, phone: $phone, email: $email) {
+    mutation CREATE_LOCATION_MUTATION($city: String!, $address: String!, $description: String, $phone: String, $email: String, $photo: String) {
+        newLocation(city: $city, address: $address, description: $description, phone: $phone, email: $email, photo: $photo) {
             _id
         }
     }
 `;
 
-const AddLocation = ({toggle}) => {
+const AddLocation = () => {
+    const router = useRouter();
     const {formData, handleChange, resetForm} = useForm({
         city: "",
         address: "",
         description: "",
         phone: "",
-        email: ""
+        email: "",
+        photo: "",
     });
     const [create, { error, loading }] = useMutation(CREATE_LOCATION_MUTATION, { 
         variables: formData,
@@ -37,19 +42,21 @@ const AddLocation = ({toggle}) => {
                                 }
                             `
                         });
-                        return [...existingItems, newItem];
+                        return [newItem, ...existingItems];
                     }
                 }
             });
-        } 
+        },
+        refetchQueries: [
+            {query: PAGINATION_QUERY, variables: {sender: "locations"}}
+        ] 
     })
 
     const handleSubmit = async e => {
         e.preventDefault();
         const res = await create();
-        console.log(res);
         resetForm();
-        toggle();
+        router.push("/admin/locations/");
     }
 
     return (
@@ -57,7 +64,7 @@ const AddLocation = ({toggle}) => {
             <Container className="col-md-6">
                 <div className="title_header">
                     <h2>
-                        <a className="safelink" onClick={e => {resetForm(); toggle()}}>Locations Manager</a>
+                        <Link href="/admin/locations">Locations Manager</Link>
                         <FontAwesomeIcon icon="caret-right" />
                         Add{loading ? 'ing' : null} Location
                     </h2>
@@ -65,6 +72,12 @@ const AddLocation = ({toggle}) => {
                 </div>
                 <Form method="POST" onSubmit={handleSubmit}>
                     <fieldset disabled={loading} aria-busy={loading}>
+                        { formData.photo && <img width="200" src={formData.photo} alt="Upload Preview" /> }
+                        <FormGroup>
+                            <Label for="image">Upload Image</Label>
+                            <Input type="file" name="photo" onChange={handleChange} />
+                            <FormText color="muted">Maximum file size - 5MB</FormText>
+                        </FormGroup>
                         <FormGroup>
                             <Label for="city">City</Label>
                             <Input type="text" name="city" value={formData.city} onChange={handleChange} required />
@@ -86,7 +99,7 @@ const AddLocation = ({toggle}) => {
                             <Input type="text" name="phone" value={formData.phone} onChange={handleChange} />
                         </FormGroup>
                         <div className="d-flex justify-content-end">
-                            <SafeButton className="cancel" type="button" onClick={() => {resetForm(); toggle()}}>Cancel</SafeButton>
+                            <SafeButton className="cancel" type="button" onClick={() => {resetForm(); router.push("/admin/locations/");}}>Cancel</SafeButton>
                             <SafeButton type="submit">Add{loading ? 'ing' : null} Location!</SafeButton>
                         </div>
                     </fieldset>
