@@ -26,7 +26,7 @@ const CREATE_USER_MUTATION = gql`
 
 const AddUser = () => {
     const router = useRouter();
-    const { loading, error, data } = useQuery(LOCATIONS_QUERY);
+    const { loading, error, data } = useQuery(LOCATIONS_QUERY, { variables: {active: true} });
     const {formData, handleChange, resetForm} = useForm({
         firstname: "",
         lastname: "",

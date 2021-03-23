@@ -63,6 +63,9 @@ const GlobalStyles = createGlobalStyle`
     }
     .safelink {
         cursor: pointer;
+        :hover {
+            text-decoration: underline;
+        }
     }
 `;
 

@@ -11,6 +11,10 @@ export const CURRENT_USER_QUERY = gql`
             email
             permissions
             photo
+            location {
+                _id
+                city
+            }
         }
     }
 `;
