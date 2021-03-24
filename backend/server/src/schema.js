@@ -49,9 +49,11 @@ const typeDefs = gql`
     }
     type Item {
         _id: ID!
+        packaging: String!
+        dimensions: String
+        reference: String
         weight: Int!
         content: String!
-        packaging: String!
         status: [Tracker]
         createdAt: Date
         updatedAt: Date
@@ -60,16 +62,29 @@ const typeDefs = gql`
         _id: ID!
         shipper_name: String!
         shipper_phone: String!
-        receiver_name: String!
-        receiver_phone: String!
-        receiver_email: String
+        shipper_email: String
+        recipient_name: String!
+        recipient_phone: String!
+        recipient_email: String
+        destination: Location!
+        origin: Location!
+        bill_to: String!
         amount: Int!
         amount_paid: Int!
         tracking: String!
-        destination: Location!
         items: [Item]
         createdAt: Date
         updatedAt: Date
+    }
+    type Message {
+        message: String!
+    }
+    input PackageItem {
+        packaging: String!
+        dimensions: String
+        reference: String
+        weight: Int!
+        content: String!
     }
     type Query {
         locations(active: Boolean, skip: Int, limit: Int) : [Location]!
@@ -79,10 +94,6 @@ const typeDefs = gql`
         me: User
         count(sender: String!) : Int
     }
-    type Message {
-        message: String!
-    }
-
     type Mutation {
         newLocation(city: String!, address: String!, description: String, phone: String, email: String, photo: String) : Location!
         updateLocation(_id: ID!) : Location!
@@ -95,6 +106,7 @@ const typeDefs = gql`
         signOut: Message
         requestReset(email: String!): Message
         resetPassword(token: String!, password: String!, confirmPassword: String!) : Message
+        package(shipper_name: String!, shipper_phone: String!, shipper_email: String, recipient_name: String!, recipient_phone: String!, recipient_email: String, destination: ID!, origin: ID!, bill_to: String, amount: Int, amount_paid: Int, items: [PackageItem]) : Package
     }
 `;
 

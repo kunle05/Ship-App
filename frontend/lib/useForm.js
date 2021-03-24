@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useForm = (initials = {}) => {
     const [formData, setFormData] = useState(initials);
+    const initialValues = Object.values(initials).join('');
+
+    useEffect(() => {
+        setFormData(initials);
+    }, [initialValues]);
 
     const handleChange = async e => {
         let { name, value, type } = e.target;

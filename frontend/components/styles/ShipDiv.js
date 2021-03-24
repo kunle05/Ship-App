@@ -44,12 +44,15 @@ const ShipDiv = styled.div`
     input, select {
         font-size: 1.3rem;
     }
-    .pkgCount {
+    .pkgCount, svg {
         display: inline-block;
         margin: 0 .8rem;
         height: 2rem;
         padding: 0;
         vertical-align: text-bottom;
+    }
+    .pkgCount {
+        margin: 0;
     }
     .bottom {
         padding: 1rem;
@@ -69,6 +72,12 @@ const ShipDiv = styled.div`
     }
     label span {
         color: var(--blue);
+    }
+    .cta {
+        justify-content: space-between;
+    }
+    .safelink {
+        margin-top: 1.5rem;
     }
 `;
 

@@ -1,4 +1,6 @@
-import { useQuery } from "@apollo/client";
+import { useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { CURRENT_USER_QUERY } from "./user/CheckLogIn";
 import { LOCATIONS_QUERY } from '../Locations'; 
@@ -7,10 +9,30 @@ import Form from "../styles/Form";
 import SafeButton from "../styles/SafeButton";
 import ShipDiv from "../styles/ShipDiv";
 import CreateItem from "./CreateItem";
-import { useState } from "react";
+import calcTotal from "../../lib/calcTotal";
+
+const PACKAGE_MUTATION = gql`
+    mutation PACKAGE_MUTATION($shipper_name: String!, $shipper_phone: String!, $shipper_email: String, $recipient_name: String!, $recipient_phone: String!, $recipient_email: String, $destination: ID!, $origin: ID!, $bill_to: String, $amount: Int, $amount_paid: Int, $items: [PackageItem]) {
+        package(shipper_name: $shipper_name, shipper_phone: $shipper_phone, shipper_email: $shipper_email, recipient_name: $recipient_name, recipient_phone: $recipient_phone, recipient_email: $recipient_email, destination: $destination, origin: $origin, bill_to: $bill_to, amount: $amount, amount_paid: $amount_paid, items: $items) {
+            _id
+            tracking
+        }
+    }
+`;
+
+const itemsInitials = {
+    packaging: "Box",
+    length: "",
+    width: "",
+    height: "",
+    reference: "",
+    weight: "",
+    content: "",
+};
 
 const CreatePackage = () => {
     const { loading, data } = useQuery(CURRENT_USER_QUERY);
+    const [amount, setAmount] = useState('0.00');
     const [items, setItems] = useState({
         show: 1,
         data: []
@@ -25,17 +47,52 @@ const CreatePackage = () => {
         recipient_email: "",
         destination: "",
         origin: data.me.location._id,
-        origin_city: 'Miami',
+        origin_city: data.me.location.city,
         bill_to: "Shipper",
         amount: "0.00",
     });
     const { loading: loadingLoc, data: dest } = useQuery(LOCATIONS_QUERY, { variables: {active: true} });
 
-    const addItem = (item) => {
+    const addItem = item => {
+        const updatedItems = [...items.data, item];
         setItems({
             show: items.show + 1,
-            data: [...items.data, item]
+            data: updatedItems
         });
+        const newTotal = calcTotal(updatedItems, formData.origin_city);
+        setAmount(newTotal);
+    };
+    const removeItem = () => {
+        let updatedItems = [];
+        if(items.show == 1) {
+            updatedItems = [...items.data.slice(1)];
+            setItems({
+                show: 1,
+                data: updatedItems
+            });
+        } else {
+            updatedItems = [...items.data.slice(0, items.show -2), ...items.data.slice(items.show-1)];
+            setItems({
+                show: items.show -1,
+                data: updatedItems
+            });
+        }
+        const newTotal = calcTotal(updatedItems, formData.origin_city);
+        setAmount(newTotal);
+    };
+    const removeLast = () => {
+        const last = items.data.pop();
+        const updatedItems = items.data;
+        setItems({
+            show: items.show -1,
+            data: updatedItems
+        });
+        const newTotal = calcTotal(updatedItems, formData.origin_city);
+        setAmount(newTotal);
+    }
+    const processship = e => {
+        e.preventDefault();
+
     }
 
     if(loading || loadingLoc) return <p>loading...</p>
@@ -45,7 +102,7 @@ const CreatePackage = () => {
                 <h2>Create Shipment</h2>
                 <p>Create a new shipment</p>
             </div>
-            <Form method="POST">
+            <Form method="POST" onSubmit={processship}>
                 <fieldset >
                     <Row>
                         <Col className="p-0 section-1">
@@ -125,15 +182,27 @@ const CreatePackage = () => {
                             </div>
                         </Col>
                         <Col className="p-0">
-                            <CreateItem loc={formData.origin_city} add={addItem} />
+                            <CreateItem 
+                                item={items.data[items.show - 1] || itemsInitials}
+                                loc={formData.origin_city} 
+                                add={addItem} 
+                                evictable={items.show !== items.data.length + 1} 
+                                remove={removeItem} 
+                                last={items.show !== 1 && items.show === items.data.length + 1}
+                                removeLast={removeLast} 
+                            />
                             <div className="section bottom">
-                                <h4>Shipper's Cost {formData.origin_city.includes('NG') ? '(NG)' : '(USD)'}</h4>
-                                <h2 className="text-right">{formData.amount}</h2>
+                                <h4>Shipper's Cost {formData.origin_city.includes('NG') ? '(NGN)' : '(USD)'}</h4>
+                                <h2 className="text-right">{amount}</h2>
                             </div>
                             <div className="section footer">
                                 <Row form>
                                     <Col sm={7}>
-                                        Package
+                                        Pkg
+                                        { 
+                                            items.show > 1 ? <a className="safelink" onClick={e => setItems({...items, show: items.show -1})}><FontAwesomeIcon icon="caret-square-left" /></a> :
+                                            <FontAwesomeIcon icon="caret-square-left" color="var(--lightGray)" />
+                                        }
                                         <Input type="select" className="pkgCount col-3" value={items.show} onChange={e => setItems({...items, show: e.target.value})} >
                                             <option value="1">1</option>
                                             {
@@ -142,10 +211,14 @@ const CreatePackage = () => {
                                                 ))
                                             }
                                         </Input>
+                                        { 
+                                            items.show < items.data.length + 1 ? <a className="safelink" onClick={e => setItems({...items, show: items.show +1})}><FontAwesomeIcon icon="caret-square-right" /></a> :
+                                            <FontAwesomeIcon icon="caret-square-right" color="var(--lightGray)" />
+                                        }
                                         of {items.data.length + 1}
                                     </Col>
                                     <Col>
-                                        <SafeButton>Process Shipment</SafeButton>
+                                        <SafeButton type="submit">Process Shipment</SafeButton>
                                     </Col>
                                 </Row>
                             </div>

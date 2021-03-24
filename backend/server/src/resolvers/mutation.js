@@ -165,6 +165,9 @@ const Mutation = {
         user.resetTokenExpiry = null; 
         await user.save();
         return {message: "Reset Succesful"};
+    },
+    package: async (_, args, ctx, info) => {
+        return null;
     }
 }
 
