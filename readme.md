@@ -1,5 +1,16 @@
-#Shipping App & site
+## Shipping App 
+
 A custom app to manage day to day shipping processes for small/large business.
 
-##Cloning Project
-Run npm install to get all dependencies
+Install front end dependencies then run the development server:
+
+```bash
+npm install
+npm run dev
+```
+
+Install back end dependencies then start the server 
+
+```bash
+node server.js
+```

@@ -20,22 +20,23 @@ const PACKAGE_MUTATION = gql`
     }
 `;
 
-const itemsInitials = {
+const initialItem = {
     packaging: "Box",
     length: "",
     width: "",
     height: "",
     reference: "",
-    weight: "",
+    weight: "0",
     content: "",
 };
 
 const CreatePackage = () => {
     const { loading, data } = useQuery(CURRENT_USER_QUERY);
+    const { loading: loadingLoc, data: dest } = useQuery(LOCATIONS_QUERY, { variables: {active: true} });
     const [amount, setAmount] = useState('0.00');
     const [items, setItems] = useState({
         show: 1,
-        data: []
+        data: [ initialItem ]
     });
     const {formData, handleChange} = useForm({
         account_number: "",
@@ -49,29 +50,35 @@ const CreatePackage = () => {
         origin: data.me.location._id,
         origin_city: data.me.location.city,
         bill_to: "Shipper",
-        amount: "0.00",
     });
-    const { loading: loadingLoc, data: dest } = useQuery(LOCATIONS_QUERY, { variables: {active: true} });
-
     const addItem = item => {
-        const updatedItems = [...items.data, item];
+        let updatedItems = items.data;
+        updatedItems[items.show-1] = item;
         setItems({
-            show: items.show + 1,
+            show: items.show,
             data: updatedItems
-        });
+        });        
         const newTotal = calcTotal(updatedItems, formData.origin_city);
         setAmount(newTotal);
-    };
+    }; 
+    const newItem = item => {
+        let updatedItems = items.data;
+        updatedItems[items.show-1] = item;
+        setItems({
+            show: items.show + 1,
+            data: [...updatedItems, initialItem]
+        });
+    }
     const removeItem = () => {
         let updatedItems = [];
-        if(items.show == 1) {
+        if(items.show === 1) {
             updatedItems = [...items.data.slice(1)];
             setItems({
                 show: 1,
                 data: updatedItems
             });
         } else {
-            updatedItems = [...items.data.slice(0, items.show -2), ...items.data.slice(items.show-1)];
+            updatedItems = [...items.data.slice(0, items.show -1), ...items.data.slice(items.show)];
             setItems({
                 show: items.show -1,
                 data: updatedItems
@@ -81,7 +88,7 @@ const CreatePackage = () => {
         setAmount(newTotal);
     };
     const removeLast = () => {
-        const last = items.data.pop();
+        items.data.pop();
         const updatedItems = items.data;
         setItems({
             show: items.show -1,
@@ -92,7 +99,6 @@ const CreatePackage = () => {
     }
     const processship = e => {
         e.preventDefault();
-
     }
 
     if(loading || loadingLoc) return <p>loading...</p>
@@ -183,12 +189,13 @@ const CreatePackage = () => {
                         </Col>
                         <Col className="p-0">
                             <CreateItem 
-                                item={items.data[items.show - 1] || itemsInitials}
+                                item={items.data[items.show - 1]}
                                 loc={formData.origin_city} 
                                 add={addItem} 
-                                evictable={items.show !== items.data.length + 1} 
+                                newItem={newItem}
+                                evictable={items.show !== items.data.length } 
                                 remove={removeItem} 
-                                last={items.show !== 1 && items.show === items.data.length + 1}
+                                last={items.show !== 1 && items.show === items.data.length}
                                 removeLast={removeLast} 
                             />
                             <div className="section bottom">
@@ -204,18 +211,17 @@ const CreatePackage = () => {
                                             <FontAwesomeIcon icon="caret-square-left" color="var(--lightGray)" />
                                         }
                                         <Input type="select" className="pkgCount col-3" value={items.show} onChange={e => setItems({...items, show: e.target.value})} >
-                                            <option value="1">1</option>
                                             {
                                                 items.data.length && items.data.map((item, idx) => (
-                                                    <option key={idx} value={idx + 2}>{idx + 2}</option>
+                                                    <option key={idx} value={idx + 1}>{idx + 1}</option>
                                                 ))
                                             }
                                         </Input>
                                         { 
-                                            items.show < items.data.length + 1 ? <a className="safelink" onClick={e => setItems({...items, show: items.show +1})}><FontAwesomeIcon icon="caret-square-right" /></a> :
+                                            items.show < items.data.length ? <a className="safelink" onClick={e => setItems({...items, show: items.show +1})}><FontAwesomeIcon icon="caret-square-right" /></a> :
                                             <FontAwesomeIcon icon="caret-square-right" color="var(--lightGray)" />
                                         }
-                                        of {items.data.length + 1}
+                                        of {items.data.length}
                                     </Col>
                                     <Col>
                                         <SafeButton type="submit">Process Shipment</SafeButton>

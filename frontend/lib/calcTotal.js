@@ -1,19 +1,19 @@
 import { standardNGNRate, standardUSDRate } from "../config";
 
-export default function calcTotal(arr, city) {
+export default function calcTotal(items, city) {
     let code = 'USD';
     let rate = standardUSDRate;
     let locale = 'en-US';
-
-    const weight = arr.reduce((total, num) => {
-        return total + num.weight
-    }, 0);
-
+    
     if(city.includes('NG')) {
         code = 'NGN';
         rate = standardNGNRate;
         locale = 'en-NG';
     };
+
+    const weight = items.reduce((total, item) => {
+        return total + parseInt(item.weight)
+    }, 0);
 
     const amount = weight * rate;
 

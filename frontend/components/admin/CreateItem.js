@@ -4,39 +4,70 @@ import useForm from "../../lib/useForm";
 
 const contents = ['Automobile', 'Clothing', 'Computer', 'Electronic', 'Food Product', 'Furniture', 'General good', 'Mobile Device', 'Other'];
 
-const CreateItem = ({ item, loc, add, evictable, remove, last, removeLast }) => {
+const CreateItem = ({ item, loc, add, newItem, evictable, remove, last, removeLast, weight }) => {
     const {formData, handleChange, resetForm} = useForm(item);
-    const [isValid, setIsValid] = useState({
+    const [isValidError, setIsValidError] = useState({
         packaging: false,
         content: false,
         weight: false
     });
+    const validateWeight = () => {
+        const {packaging, content} = formData;
+        !packaging ? setIsValidError({...isValidError, packaging: true}) :
+        !content ? setIsValidError({...isValidError, content: true}) : null
 
-    const validate = () => {
-        const {packaging, content, weight} = formData;
-        !packaging ? setIsValid({...isValid, packaging: true}) :
-        !content ? setIsValid({...isValid, content: true}) :
-        !weight ? setIsValid({...isValid, weight: true}) :
-        null
-
-        if(!packaging || !content || !weight) {
+        if(!packaging || !content) {
             return false;
         } else {
             return true;
         }
     }
+    const validate = () => {
+        const {packaging, content, weight} = formData;
+        !packaging ? setIsValidError({...isValidError, packaging: true}) :
+        !content ? setIsValidError({...isValidError, content: true}) :
+        !weight ? setIsValidError({...isValidError, weight: true}) :
+        null
+
+        if(!packaging || !content || !weight || !isNum(formData.weight)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    const isNum = (val) => {
+        return /^\d+$/.test(val)
+    }
     const addItem = () => {
         if(validate()) {
-            add(formData);
             resetForm();
+            newItem(formData);
         };
+    }
+    const handleWeightChange = e => {
+        isValidError.weight ? 
+            setIsValidError({...isValidError, weight: false}) 
+            : null;
+        const weightValid = validateWeight();
+        const isnum = isNum(e.target.value);
+
+        if(weightValid && isnum) {
+            handleChange(e);
+            const data = formData;
+            data.weight = e.target.value;
+            add(data);
+        } 
+        else if(!isnum) {
+            setIsValidError({...isValidError, weight: true});
+            handleChange(e);
+        }
     }
 
     return (
         <div className="section pb-0">
             <FormGroup>
                 <Label for="packaging">Package Type <span>*</span></Label>
-                <Input type="select" name="packaging" value={formData.packaging} onChange={handleChange} required invalid={isValid.packaging} >
+                <Input type="select" name="packaging" value={formData.packaging} onChange={handleChange} required invalid={isValidError.packaging} >
                     <option value="Box">Box</option>
                     <option value="Crate">Crate</option>
                     <option value="Pallet">Pallet</option>
@@ -70,8 +101,8 @@ const CreateItem = ({ item, loc, add, evictable, remove, last, removeLast }) => 
             <FormGroup>
                 <Label for="content">Content Category <span>*</span></Label>
                 <Input type="select" name="content" value={formData.content} 
-                onChange={e => {isValid.content ? setIsValid({...isValid, content: false}) : null; handleChange(e)} } 
-                required invalid={isValid.content} >
+                onChange={e => {isValidError.content ? setIsValidError({...isValidError, content: false}) : null; handleChange(e)} } 
+                required invalid={isValidError.content} >
                     <option>Choose one...</option>
                     {contents.map((content, idx) => (
                         <option key={idx} value={content}> {content} </option>
@@ -82,8 +113,8 @@ const CreateItem = ({ item, loc, add, evictable, remove, last, removeLast }) => 
                 <Label for="weight">Weight <span>*</span></Label>
                 <InputGroup>
                     <Input className="col-sm-6" type="text" name="weight" value={formData.weight} 
-                    onChange={e => {isValid.weight ? setIsValid({...isValid, weight: false}) : null; handleChange(e)} }  
-                    required invalid={isValid.weight} />
+                    onChange={handleWeightChange}
+                    required invalid={isValidError.weight} />
                     <InputGroupAddon addonType="append">
                         <InputGroupText><b>{loc.includes('NG') ? 'KG' : 'LBS'}</b></InputGroupText>
                     </InputGroupAddon>
@@ -91,16 +122,16 @@ const CreateItem = ({ item, loc, add, evictable, remove, last, removeLast }) => 
             </FormGroup>
             { last ? 
                 <Row className="cta">
-                    <h4 className="safelink" onClick={e => removeLast()}>
-                        <a>Remove this Package</a>
-                    </h4> 
-                    <h4 className="safelink" onClick={addItem}>
-                        <a>Add Package</a>
-                    </h4>
+                    <a className="safelink" onClick={e => removeLast()}>Remove this Package</a>
+                    <a className="safelink" onClick={addItem}>Add Package</a>
                 </Row> :
                 evictable ? 
-                    <h4 className="text-right safelink pt-3" onClick={e => remove()}><a>Remove this Package</a></h4> :
-                    <h4 className="text-right safelink pt-3" onClick={addItem}><a>Add Package</a></h4>
+                    <Row className="justify-content-end">
+                        <a className="text-right safelink" onClick={e => remove()}>Remove this Package</a> 
+                    </Row> :
+                    <Row className="justify-content-end">
+                        <a className="text-right safelink" onClick={addItem}>Add Package</a>
+                    </Row>
             }
         </div>
     );
