@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Item = require('./item')
+const ItemSchema = require('./item').schema
 const Location = require('./location');
 
 const PackageSchema = new mongoose.Schema({
@@ -16,7 +16,9 @@ const PackageSchema = new mongoose.Schema({
     amount: {type: Number, required: true},
     amount_paid: {type: Number, required: true, default: 0},
     tracking: {type: String, required: true},
-    items: {type: [mongoose.ObjectId], ref: Item} 
+    items: {type: [ItemSchema], required: true} 
 }, {timestamps: true});
 
-mongoose.model('Package', PackageSchema);
+const Package = mongoose.model('Package', PackageSchema);
+
+module.exports = Package;

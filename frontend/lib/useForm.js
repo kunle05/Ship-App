@@ -13,7 +13,7 @@ const useForm = (initials = {}) => {
         if(type === 'number') {
             value = parseFloat(value);
         };
-
+        
         if(type === 'file') {
             const files = e.target.files;
             const data = new FormData();

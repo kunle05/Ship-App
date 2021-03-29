@@ -9,7 +9,10 @@ const CreateItem = ({ item, loc, add, newItem, evictable, remove, last, removeLa
     const [isValidError, setIsValidError] = useState({
         packaging: false,
         content: false,
-        weight: false
+        weight: false,
+        length: false,
+        width: false,
+        height: false,
     });
     const validateWeight = () => {
         const {packaging, content} = formData;
@@ -27,11 +30,17 @@ const CreateItem = ({ item, loc, add, newItem, evictable, remove, last, removeLa
         !packaging ? setIsValidError({...isValidError, packaging: true}) :
         !content ? setIsValidError({...isValidError, content: true}) :
         !weight ? setIsValidError({...isValidError, weight: true}) :
-        null
+        null;
 
+        for(const key in isValidError) {
+            if(isValidError[key] === true) {
+                return false
+            }
+        }
         if(!packaging || !content || !weight || !isNum(formData.weight)) {
             return false;
-        } else {
+        } 
+        else {
             return true;
         }
     }
@@ -52,15 +61,36 @@ const CreateItem = ({ item, loc, add, newItem, evictable, remove, last, removeLa
         const isnum = isNum(e.target.value);
 
         if(weightValid && isnum) {
-            handleChange(e);
+            let { value } = e.target;
+            value = parseInt(value);
+            handleChange({...e, value});
             const data = formData;
-            data.weight = e.target.value;
+            data.weight = value;
             add(data);
         } 
         else if(!isnum) {
             setIsValidError({...isValidError, weight: true});
             handleChange(e);
         }
+    }
+    const dimension = e => {
+        let { value, name } = e.target;
+        const isnum = isNum(value);
+
+        if(isValidError[name]) {
+            setIsValidError({
+                ...isValidError,
+                [name]: false
+            })
+        }
+
+        if(!isnum) {
+            setIsValidError({
+                ...isValidError,
+                [name]: true
+            })
+        }
+        handleChange(e)
     }
 
     return (
@@ -78,19 +108,19 @@ const CreateItem = ({ item, loc, add, newItem, evictable, remove, last, removeLa
                 <Col>
                     <FormGroup>
                         <Label for="length">Length</Label>
-                        <Input type="text" name="length" value={formData.length} onChange={handleChange} />
+                        <Input type="text" name="length" value={formData.length} onChange={dimension} invalid={isValidError.length} />
                     </FormGroup>
                 </Col>
                 <Col>
                     <FormGroup>
                         <Label for="width">Width</Label>
-                        <Input type="text" name="width" value={formData.width} onChange={handleChange} />
+                        <Input type="text" name="width" value={formData.width} onChange={dimension} invalid={isValidError.width} />
                     </FormGroup>
                 </Col>
                 <Col>
                     <FormGroup>
                         <Label for="height">Height</Label>
-                        <Input type="text" name="height" value={formData.height} onChange={handleChange} />
+                        <Input type="text" name="height" value={formData.height} onChange={dimension} invalid={isValidError.height} />
                     </FormGroup>
                 </Col>
             </Row>

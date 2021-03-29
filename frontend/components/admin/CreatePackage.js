@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { CURRENT_USER_QUERY } from "./user/CheckLogIn";
@@ -15,7 +15,13 @@ const PACKAGE_MUTATION = gql`
     mutation PACKAGE_MUTATION($shipper_name: String!, $shipper_phone: String!, $shipper_email: String, $recipient_name: String!, $recipient_phone: String!, $recipient_email: String, $destination: ID!, $origin: ID!, $bill_to: String, $amount: Int, $amount_paid: Int, $items: [PackageItem]) {
         package(shipper_name: $shipper_name, shipper_phone: $shipper_phone, shipper_email: $shipper_email, recipient_name: $recipient_name, recipient_phone: $recipient_phone, recipient_email: $recipient_email, destination: $destination, origin: $origin, bill_to: $bill_to, amount: $amount, amount_paid: $amount_paid, items: $items) {
             _id
+            shipper_name
             tracking
+            amount
+            items {
+                packaging
+                weight
+            }
         }
     }
 `;
@@ -26,7 +32,7 @@ const initialItem = {
     width: "",
     height: "",
     reference: "",
-    weight: "0",
+    weight: "",
     content: "",
 };
 
@@ -38,7 +44,7 @@ const CreatePackage = () => {
         show: 1,
         data: [ initialItem ]
     });
-    const {formData, handleChange} = useForm({
+    const {formData, handleChange, resetForm} = useForm({
         account_number: "",
         shipper_name: "",
         shipper_phone: "",
@@ -51,6 +57,13 @@ const CreatePackage = () => {
         origin_city: data.me.location.city,
         bill_to: "Shipper",
     });
+    const [ ship, {error}] = useMutation(PACKAGE_MUTATION, { 
+        variables: {
+            ...formData, 
+            items: [...items.data]
+        }
+    });
+
     const addItem = item => {
         let updatedItems = items.data;
         updatedItems[items.show-1] = item;
@@ -97,8 +110,11 @@ const CreatePackage = () => {
         const newTotal = calcTotal(updatedItems, formData.origin_city);
         setAmount(newTotal);
     }
-    const processship = e => {
+    const processship = async e => {
         e.preventDefault();
+        const res = await ship();
+        console.log(res);   //
+        resetForm();
     }
 
     if(loading || loadingLoc) return <p>loading...</p>

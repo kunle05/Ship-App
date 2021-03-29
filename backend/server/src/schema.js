@@ -81,7 +81,9 @@ const typeDefs = gql`
     }
     input PackageItem {
         packaging: String!
-        dimensions: String
+        length: String
+        width: String
+        height: String
         reference: String
         weight: Int!
         content: String!

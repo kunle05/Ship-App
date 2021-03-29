@@ -8,6 +8,7 @@ require('dotenv').config();
 require('./server/config/mongoose');
 
 const Location = require('./server/models/location');
+const Package = require('./server/models/package');
 const User = require('./server/models/user');
 
 const typeDefs = require('./server/src/schema');
@@ -34,7 +35,7 @@ app.use((req, res, next) => {
 const server = new ApolloServer({
     typeDefs,
     resolvers: { Query, Mutation },
-    context: (req) => ({ ...req, Location, User })
+    context: (req) => ({ ...req, Location, User, Package })
 });
 
 server.applyMiddleware({ app, path: '/', cors: false });

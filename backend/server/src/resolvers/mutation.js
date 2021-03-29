@@ -167,7 +167,39 @@ const Mutation = {
         return {message: "Reset Succesful"};
     },
     package: async (_, args, ctx, info) => {
-        return null;
+        if(!ctx.req.userId) {
+            throw new Error("Log in is required")
+        }
+        const { origin, items } = args;
+        let amount = 0;
+
+        const weight = items.reduce((tally, item) => {
+            item.status = [{
+                user: ctx.req.userId
+            }]
+            return tally + item.weight;
+        }, 0);
+
+        const originLoc = await ctx.Location.findById(origin);
+        if(!originLoc) {
+            throw new Error("Shipment origin is required");
+        }
+        if(originLoc.city.includes('NG')) {
+            amount = weight * +process.env.NGN_RATE
+        } else {
+            amount = weight * +process.env.USD_RATE
+        }
+
+        let rand1 = await crypto.randomBytes(20).toString('hex').slice(0, 8);
+        let rand2 = await crypto.randomBytes(20).toString('hex').slice(14, 21);
+        const tracking = (rand1 + rand2).toUpperCase();
+
+        const package = new ctx.Package(args);
+        package.items = items;
+        package.amount = amount;
+        package.tracking = tracking;
+        const res = await package.save()
+        return res;
     }
 }
 
