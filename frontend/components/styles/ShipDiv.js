@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 const ShipDiv = styled.div`
     padding: .5rem;
-    margin: 3rem auto;
+    max-width: 60%;
+    margin: 1.5rem auto;
     font-size: 1.8rem;
     .title_header {
         padding: 0 3rem;
@@ -26,6 +27,9 @@ const ShipDiv = styled.div`
     }
     form {
         margin-top: 0;
+        fieldset:before {
+            margin-bottom: 1rem;
+        }
     }
     .row, label {
         margin: auto 0;

@@ -10,9 +10,8 @@ const loading = keyframes`
 `;
 
 const Form = styled.form`
-    margin-top: 3rem;
+    /* margin-top: 3rem; */
     padding: 3rem;
-    /* box-shadow: var(--bs); */
     .text-muted {
         font-size: 1.2rem;
     }

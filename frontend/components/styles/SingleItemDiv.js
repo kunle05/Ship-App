@@ -7,7 +7,6 @@ const SingleItemDiv = styled.div`
     }
     .title_header {
         border-bottom: 1px solid var(--lightGrey);
-        margin-bottom: 3rem;
         padding: 3rem 3rem 0;
         h2 {
             font-size: 3rem;
@@ -28,6 +27,7 @@ const SingleItemDiv = styled.div`
         }
     }
     .text-center {
+        margin-top: 2rem;
         .info {
             margin-bottom: 0;
             font-size: 1.8rem;

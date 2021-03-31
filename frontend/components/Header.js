@@ -4,7 +4,7 @@ import styled from "styled-components";
 import NavItems from "./NavItems";
 
 export const StyledHeader = styled.header`
-    padding: 2.5rem 12rem;
+    padding: 2rem 12rem;
     border-bottom: 1rem solid var(--blue);
     .nav-item .nav-link {
         padding: 1rem 2rem;

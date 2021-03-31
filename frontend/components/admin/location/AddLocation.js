@@ -74,7 +74,7 @@ const AddLocation = () => {
                     <fieldset disabled={loading} aria-busy={loading}>
                         { formData.photo && <img width="200" src={formData.photo} alt="Upload Preview" /> }
                         <FormGroup>
-                            <Label for="image">Upload Image</Label>
+                            <Label for="image">Upload{ formData.photo ? 'ed' : '' } Image</Label>
                             <Input type="file" name="photo" onChange={handleChange} />
                             <FormText color="muted">Maximum file size - 5MB</FormText>
                         </FormGroup>
