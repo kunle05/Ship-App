@@ -8,6 +8,7 @@ import SignOut from "./user/SignOut";
 const StyledNavItems = styled.div`
     .dropdown-menu {
         width: max-content !important;
+        min-width: 100%;
     }
     .dropdown-item {
         padding: 1rem;
