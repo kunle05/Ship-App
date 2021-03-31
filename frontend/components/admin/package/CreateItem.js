@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Row } from "reactstrap";
-import useForm from "../../lib/useForm";
+import useForm from "../../../lib/useForm";
 
 const contents = ['Automobile', 'Clothing', 'Computer', 'Electronic', 'Food Product', 'Furniture', 'General good', 'Mobile Device', 'Other'];
 
-const CreateItem = ({ item, loc, add, newItem, evictable, remove, last, removeLast, weight }) => {
+const CreateItem = ({ item, currency, add, newItem, evictable, remove, last, removeLast }) => {
     const {formData, handleChange, resetForm} = useForm(item);
     const [isValidError, setIsValidError] = useState({
         packaging: false,
@@ -146,7 +146,7 @@ const CreateItem = ({ item, loc, add, newItem, evictable, remove, last, removeLa
                     onChange={handleWeightChange}
                     required invalid={isValidError.weight} />
                     <InputGroupAddon addonType="append">
-                        <InputGroupText><b>{loc.includes('NG') ? 'KG' : 'LBS'}</b></InputGroupText>
+                        <InputGroupText><b>{currency === 'NGN' ? 'KG' : 'LBS'}</b></InputGroupText>
                     </InputGroupAddon>
                 </InputGroup>
             </FormGroup>

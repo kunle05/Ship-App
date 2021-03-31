@@ -20,7 +20,7 @@ const StyledSideNav = styled.div`
     }
     svg {
         height: 2.2rem;
-        width: 2.2rem;
+        width: 2.2rem !important;
         margin: 0 1rem 0.2rem 1.5rem;
         color: var(--lightGray);
         vertical-align: text-bottom;

@@ -1,12 +1,10 @@
 import { standardNGNRate, standardUSDRate } from "../config";
 
-export default function calcTotal(items, city) {
-    let code = 'USD';
+export default function calcTotal(items, currency) {
     let rate = standardUSDRate;
     let locale = 'en-US';
     
-    if(city.includes('NG')) {
-        code = 'NGN';
+    if(currency === 'NGN') {
         rate = standardNGNRate;
         locale = 'en-NG';
     };
@@ -19,7 +17,7 @@ export default function calcTotal(items, city) {
 
     const options = {
         style: 'currency',
-        currency: code,
+        currency,
         minimumFractionDigits: 2
     };
     

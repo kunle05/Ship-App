@@ -42,7 +42,7 @@ const ShipDiv = styled.div`
     }
     .section {
         border-right: .3rem solid var(--lightGray);
-        border-bottom: .3rem solid var(--lightGray);
+        border-top: .3rem solid var(--lightGray);
         padding: 2rem;
     }
     input, select {
@@ -60,16 +60,13 @@ const ShipDiv = styled.div`
     }
     .bottom {
         padding: 1rem;
-    }
-    .footer {
-        bottom: 0;
-        position: absolute;
-        width: inherit;
-        padding-bottom: 1rem;
-        padding-right: 1rem;
+        border-bottom: 0;
         .form-row {
             align-items: flex-end;
         }
+    }
+    .sides {
+        border-bottom: .3rem solid var(--lightGray);
     }
     button {
         margin: 0;

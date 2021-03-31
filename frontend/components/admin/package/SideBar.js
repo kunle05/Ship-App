@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Collapse } from "reactstrap"
-import StyledSideNav from "../styles/SideBar";
+import StyledSideNav from "../../styles/SideBar";
 import SideBarItem from "./SideBarItem";
 
 const initials = {
@@ -24,7 +24,7 @@ const NewSideBar = () => {
         <StyledSideNav className="col-lg-3">
             <p>Recently Shipped Items</p>
             <div onClick={toggle} id='today' className="bar-item safelink">
-                <FontAwesomeIcon icon={isOpen.today ? 'caret-down' : 'caret-right'} />
+                <FontAwesomeIcon icon={isOpen.today ? 'caret-down' : 'caret-right'} id="today" />
                 Today
             </div>
             <Collapse isOpen={isOpen.today}>
@@ -32,7 +32,7 @@ const NewSideBar = () => {
             </Collapse>
 
             <div onClick={toggle} id="yesterday" className="bar-item safelink">
-                <FontAwesomeIcon icon={isOpen.yesterday ? 'caret-down' : 'caret-right'} />
+                <FontAwesomeIcon icon={isOpen.yesterday ? 'caret-down' : 'caret-right'} id="yesterday" />
                 Yesterday
             </div>
             <Collapse isOpen={isOpen.yesterday}>

@@ -44,6 +44,9 @@ const GlobalStyles = createGlobalStyle`
     .modal {
         top: calc(25% - 50px);
     }
+    .modal-dialog {
+        max-width: 680px;
+    }
     .modal-header {
         border: 0;
         button {

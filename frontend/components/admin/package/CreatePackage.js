@@ -2,15 +2,16 @@ import { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
-import { CURRENT_USER_QUERY } from "./user/CheckLogIn";
-import { LOCATIONS_QUERY } from '../Locations'; 
-import useForm from "../../lib/useForm";
-import Form from "../styles/Form";
-import SafeButton from "../styles/SafeButton";
-import ShipDiv from "../styles/ShipDiv";
+import { CURRENT_USER_QUERY } from "../user/CheckLogIn";
+import { LOCATIONS_QUERY } from '../../Locations'; 
+import useForm from "../../../lib/useForm";
+import Form from "../../styles/Form";
+import SafeButton from "../../styles/SafeButton";
+import ShipDiv from "../../styles/ShipDiv";
 import CreateItem from "./CreateItem";
-import calcTotal from "../../lib/calcTotal";
+import calcTotal from "../../../lib/calcTotal";
 import SideBar from "./SideBar";
+import ModalDiv from "./Modal";
 
 const PACKAGE_MUTATION = gql`
     mutation PACKAGE_MUTATION($shipper_name: String!, $shipper_phone: String!, $shipper_email: String, $recipient_name: String!, $recipient_phone: String!, $recipient_email: String, $destination: ID!, $origin: ID!, $bill_to: String, $amount: Int, $amount_paid: Int, $items: [PackageItem]) {
@@ -41,6 +42,7 @@ const CreatePackage = () => {
     const { loading, data } = useQuery(CURRENT_USER_QUERY);
     const { loading: loadingLoc, data: dest } = useQuery(LOCATIONS_QUERY, { variables: {active: true} });
     const [amount, setAmount] = useState('0.00');
+    const [modal, setModal] = useState(false);
     const [items, setItems] = useState({
         show: 1,
         data: [ initialItem ]
@@ -55,15 +57,19 @@ const CreatePackage = () => {
         recipient_email: "",
         destination: "",
         origin: data.me.location._id,
-        origin_city: data.me.location.city,
+        currency: data.me.location.city.includes('NG') ? 'NGN' : 'USD',
         bill_to: "Shipper",
     });
-    const [ ship, {error}] = useMutation(PACKAGE_MUTATION, { 
+    const [ ship, {error, data: shippedItem}] = useMutation(PACKAGE_MUTATION, { 
         variables: {
             ...formData, 
             items: [...items.data]
         }
     });
+
+    const openCloseModal = () => {
+        setModal(!modal);
+    }
 
     const addItem = item => {
         let updatedItems = items.data;
@@ -72,7 +78,7 @@ const CreatePackage = () => {
             show: items.show,
             data: updatedItems
         });        
-        const newTotal = calcTotal(updatedItems, formData.origin_city);
+        const newTotal = calcTotal(updatedItems, formData.currency);
         setAmount(newTotal);
     }; 
     const newItem = item => {
@@ -98,7 +104,7 @@ const CreatePackage = () => {
                 data: updatedItems
             });
         }
-        const newTotal = calcTotal(updatedItems, formData.origin_city);
+        const newTotal = calcTotal(updatedItems, formData.currency);
         setAmount(newTotal);
     };
     const removeLast = () => {
@@ -108,14 +114,17 @@ const CreatePackage = () => {
             show: items.show -1,
             data: updatedItems
         });
-        const newTotal = calcTotal(updatedItems, formData.origin_city);
+        const newTotal = calcTotal(updatedItems, formData.currency);
         setAmount(newTotal);
     }
     const processship = async e => {
         e.preventDefault();
-        const res = await ship();
-        console.log(res);   //
-        resetForm();
+        openCloseModal();
+        // const res = await ship();
+        // console.log(res);
+        // if(res.data.package) {
+        //     resetForm();
+        // }
     }
 
     if(loading || loadingLoc) return <p>loading...</p>
@@ -126,7 +135,7 @@ const CreatePackage = () => {
                 <Form method="POST" onSubmit={processship}>
                     <fieldset >
                         <Row>
-                            <Col className="p-0 section-1">
+                            <Col className="p-0 section-1 sides">
                                 <div className="section">
                                     <FormGroup>
                                         <Label for="account_number">Account Number</Label>
@@ -202,10 +211,10 @@ const CreatePackage = () => {
                                     </Row>
                                 </div>
                             </Col>
-                            <Col className="p-0">
+                            <Col className="p-0 sides">
                                 <CreateItem 
                                     item={items.data[items.show - 1]}
-                                    loc={formData.origin_city} 
+                                    currency={formData.currency} 
                                     add={addItem} 
                                     newItem={newItem}
                                     evictable={items.show !== items.data.length } 
@@ -214,10 +223,10 @@ const CreatePackage = () => {
                                     removeLast={removeLast} 
                                     />
                                 <div className="section bottom">
-                                    <h4>Shipper's Cost {formData.origin_city.includes('NG') ? '(NGN)' : '(USD)'}</h4>
+                                    <h4>Shipper's Cost ({formData.currency})</h4>
                                     <h2 className="text-right">{amount}</h2>
                                 </div>
-                                <div className="section footer">
+                                <div className="section bottom">
                                     <Row form>
                                         <Col sm={7}>
                                             Pkg
@@ -247,6 +256,7 @@ const CreatePackage = () => {
                         </Row>  
                     </fieldset>
                 </Form>
+                <ModalDiv open={modal} setOpen={openCloseModal} item={{amount, shipper: formData.shipper_name}} currency={formData.currency} />
             </ShipDiv>
         </Row>
     );

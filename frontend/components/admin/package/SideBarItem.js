@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Collapse } from "reactstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import StyledInnerBar from "../styles/StyledInnerBar";
+import StyledInnerBar from "../../styles/StyledInnerBar";
 
 const SideBarItem = () => {
     const [isOpen, setIsOpen] = useState(false);
