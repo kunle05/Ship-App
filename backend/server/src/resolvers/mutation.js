@@ -166,7 +166,7 @@ const Mutation = {
         await user.save();
         return {message: "Reset Succesful"};
     },
-    package: async (_, args, ctx, info) => {
+    newPackage: async (_, args, ctx, info) => {
         if(!ctx.req.userId) {
             throw new Error("Log in is required")
         }

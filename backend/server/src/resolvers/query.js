@@ -58,7 +58,18 @@ const Query = {
         if(args.sender == "users") {
             return ctx.User.countDocuments();
         }
-    }
+    },
+    weeklyPackages: async (_, args, ctx, info) => {
+        if(!ctx.req.userId) {
+            throw new Error("Log in is required")
+        }
+        const { origin } = args;
+
+        return ctx.Package.find({
+            origin, 
+            createdAt: { $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000) }
+        }).sort('-createdAt');
+    },
 }
 
 module.exports = Query

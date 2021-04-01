@@ -95,6 +95,7 @@ const typeDefs = gql`
         user(_id: ID!) : User
         me: User
         count(sender: String!) : Int
+        weeklyPackages(origin: ID) : [Package]!
     }
     type Mutation {
         newLocation(city: String!, address: String!, description: String, phone: String, email: String, photo: String) : Location!
@@ -108,7 +109,7 @@ const typeDefs = gql`
         signOut: Message
         requestReset(email: String!): Message
         resetPassword(token: String!, password: String!, confirmPassword: String!) : Message
-        package(shipper_name: String!, shipper_phone: String!, shipper_email: String, recipient_name: String!, recipient_phone: String!, recipient_email: String, destination: ID!, origin: ID!, bill_to: String, amount: Int, amount_paid: Int, items: [PackageItem]) : Package
+        newPackage(shipper_name: String!, shipper_phone: String!, shipper_email: String, recipient_name: String!, recipient_phone: String!, recipient_email: String, destination: ID!, origin: ID!, bill_to: String, amount: Int, amount_paid: Int, items: [PackageItem]) : Package
     }
 `;
 

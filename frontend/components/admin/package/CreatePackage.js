@@ -15,10 +15,9 @@ import ModalDiv from "./Modal";
 
 const PACKAGE_MUTATION = gql`
     mutation PACKAGE_MUTATION($shipper_name: String!, $shipper_phone: String!, $shipper_email: String, $recipient_name: String!, $recipient_phone: String!, $recipient_email: String, $destination: ID!, $origin: ID!, $bill_to: String, $amount: Int, $amount_paid: Int, $items: [PackageItem]) {
-        package(shipper_name: $shipper_name, shipper_phone: $shipper_phone, shipper_email: $shipper_email, recipient_name: $recipient_name, recipient_phone: $recipient_phone, recipient_email: $recipient_email, destination: $destination, origin: $origin, bill_to: $bill_to, amount: $amount, amount_paid: $amount_paid, items: $items) {
+        newPackage(shipper_name: $shipper_name, shipper_phone: $shipper_phone, shipper_email: $shipper_email, recipient_name: $recipient_name, recipient_phone: $recipient_phone, recipient_email: $recipient_email, destination: $destination, origin: $origin, bill_to: $bill_to, amount: $amount, amount_paid: $amount_paid, items: $items) {
             _id
             shipper_name
-            tracking
             amount
             items {
                 packaging
@@ -42,6 +41,7 @@ const CreatePackage = () => {
     const { loading, data } = useQuery(CURRENT_USER_QUERY);
     const { loading: loadingLoc, data: dest } = useQuery(LOCATIONS_QUERY, { variables: {active: true} });
     const [amount, setAmount] = useState('0.00');
+    const [amount_paid, setAmountPaid] = useState(0);
     const [modal, setModal] = useState(false);
     const [items, setItems] = useState({
         show: 1,
@@ -60,11 +60,30 @@ const CreatePackage = () => {
         currency: data.me.location.city.includes('NG') ? 'NGN' : 'USD',
         bill_to: "Shipper",
     });
-    const [ ship, {error, data: shippedItem}] = useMutation(PACKAGE_MUTATION, { 
+    const [ ship, { error }] = useMutation(PACKAGE_MUTATION, { 
         variables: {
             ...formData, 
+            amount_paid: parseFloat(amount_paid),
             items: [...items.data]
-        }
+        },
+        update(cache, { data: { newPackage }}) {
+            cache.modify({
+                fields: {
+                    weeklyPackages(existingPackages = []) {
+                        const newItem = cache.writeFragment({
+                            data: newPackage,
+                            fragment: gql`
+                                fragment NewItem on Item {
+                                    id
+                                    type
+                                }
+                            `
+                        });
+                        return [newItem, ...existingPackages];
+                    }
+                }
+            });
+        },
     });
 
     const openCloseModal = () => {
@@ -117,22 +136,31 @@ const CreatePackage = () => {
         const newTotal = calcTotal(updatedItems, formData.currency);
         setAmount(newTotal);
     }
-    const processship = async e => {
+    const amountPaid = val => {
+        setAmountPaid(val);
+    }
+    const processPayment = async e => {
         e.preventDefault();
         openCloseModal();
-        // const res = await ship();
-        // console.log(res);
-        // if(res.data.package) {
-        //     resetForm();
-        // }
+    }
+    const processShipment = async () => {
+        await ship();
+        resetForm();
+        setAmount('0.00');
+        setAmountPaid(0);
+        openCloseModal();
+        setItems({
+            show: 1,
+            data: [ initialItem ]
+        });
     }
 
     if(loading || loadingLoc) return <p>loading...</p>
     return (
         <Row>
-            <SideBar />
+            <SideBar origin={formData.origin} currency={formData.currency} />
             <ShipDiv className="col-lg-9">
-                <Form method="POST" onSubmit={processship}>
+                <Form method="POST" onSubmit={processPayment}>
                     <fieldset >
                         <Row>
                             <Col className="p-0 section-1 sides">
@@ -221,7 +249,7 @@ const CreatePackage = () => {
                                     remove={removeItem} 
                                     last={items.show !== 1 && items.show === items.data.length}
                                     removeLast={removeLast} 
-                                    />
+                                />
                                 <div className="section bottom">
                                     <h4>Shipper's Cost ({formData.currency})</h4>
                                     <h2 className="text-right">{amount}</h2>
@@ -256,7 +284,13 @@ const CreatePackage = () => {
                         </Row>  
                     </fieldset>
                 </Form>
-                <ModalDiv open={modal} setOpen={openCloseModal} item={{amount, shipper: formData.shipper_name}} currency={formData.currency} />
+                <ModalDiv 
+                    open={modal} 
+                    setOpen={openCloseModal} 
+                    item={{amount, shipper: formData.shipper_name}} 
+                    process={processShipment} 
+                    paid={amountPaid} 
+                />
             </ShipDiv>
         </Row>
     );

@@ -26,7 +26,7 @@ const StyledSideNav = styled.div`
         vertical-align: text-bottom;
     }
     .collapse {
-        padding: 1rem 0 1rem 2rem;
+        padding-left: 2rem;
         border-top: 1px solid #2a4773;
         border-bottom: 1px solid #2a4773;
         margin-top: -3rem;
