@@ -5,6 +5,7 @@ const StyledSideNav = styled.div`
     min-height: 100vh;
     max-width: 29rem;
     padding-top: 2rem;
+    padding-right: 0;
     color: var(--white);
     p {
         color: #6f7782;

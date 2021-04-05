@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const cryptoRandomString = require('crypto-random-string');
 const { matchPassword, hasPermission }= require("../utils");
 const { transport, makeEmail } = require('../mail');
 
@@ -189,10 +190,7 @@ const Mutation = {
         } else {
             amount = weight * +process.env.USD_RATE
         }
-
-        let rand1 = await crypto.randomBytes(20).toString('hex').slice(0, 8);
-        let rand2 = await crypto.randomBytes(20).toString('hex').slice(14, 21);
-        const tracking = (rand1 + rand2).toUpperCase();
+        const tracking = cryptoRandomString({length: 15, type: 'alphanumeric'}).toUpperCase();
 
         const package = new ctx.Package(args);
         package.items = items;
