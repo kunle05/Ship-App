@@ -28,7 +28,7 @@ const WEEKLY_PACKAGE_QUERY = gql`
 const midnight = new Date().setHours(0,0,0,0);
 const twoNightsAgo = new Date().setHours(-24,0,0,0);
 
-const NewSideBar = ({ origin, currency }) => {
+const SideBar = ({ origin, currency }) => {
     const [isOpen, setIsOpen] = useState(initials);
     const { loading, error, data } = useQuery(WEEKLY_PACKAGE_QUERY, { variables: {origin} })
 
@@ -86,4 +86,4 @@ const NewSideBar = ({ origin, currency }) => {
     );
 };
 
-export default NewSideBar;
+export default SideBar;

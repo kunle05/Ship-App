@@ -69,6 +69,45 @@ const StyledTableDiv = styled.div`
             }
         }
     }
+    .pkg-tab {
+        border: 1px solid var(--blue);
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+        .d-flex {
+            background: var(--blue);
+            color: var(--white);
+            border-radius: 1rem 1rem 0 0;
+            padding: .8rem 1.5rem;
+            align-items: center;
+            span {
+                background: #6f7782;
+                padding: 0 1rem;
+                border-radius: 50%;
+            }
+            input {
+                height: 1.5rem;
+                width: 1.5rem;
+                margin-right: 1.5rem;
+            }
+        }
+        .d-flex.closed, tr {
+            border-radius: 1rem;
+        }
+        table {
+            box-shadow: none;
+            margin: 0;
+            tbody {
+                font-weight: bold;
+                td:first-child {
+                    width: 2rem;
+                    padding-left: 1.6rem;
+                }
+                td:nth-child(2) {
+                    width: 20rem;
+                }
+            }
+        }
+    }
     @media (max-width: 1025px) {
         margin: 1.5rem;
     }

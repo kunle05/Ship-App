@@ -59,6 +59,7 @@ const SignIn = () => {
         <AdminHeader />
         <SingleItemDiv>
             { mode.login && <Container className="col-md-6">
+                { error && <p>Error...</p>}
                 <div className="title_header">
                     <h2>Sign in to your account!</h2>
                 </div>

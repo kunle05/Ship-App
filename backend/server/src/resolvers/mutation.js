@@ -190,7 +190,7 @@ const Mutation = {
         } else {
             amount = weight * +process.env.USD_RATE
         }
-        const tracking = cryptoRandomString({length: 15, type: 'alphanumeric'}).toUpperCase();
+        const tracking = cryptoRandomString({length: 16, type: 'alphanumeric'}).toUpperCase();
 
         const package = new ctx.Package(args);
         package.items = items;

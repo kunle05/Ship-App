@@ -50,7 +50,9 @@ const typeDefs = gql`
     type Item {
         _id: ID!
         packaging: String!
-        dimensions: String
+        length: String
+        width: String
+        height: String
         reference: String
         weight: Int!
         content: String!
@@ -96,6 +98,7 @@ const typeDefs = gql`
         me: User
         count(sender: String!) : Int
         weeklyPackages(origin: ID) : [Package]!
+        outBoundPackages(origin: ID) : [Package]
     }
     type Mutation {
         newLocation(city: String!, address: String!, description: String, phone: String, email: String, photo: String) : Location!

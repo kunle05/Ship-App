@@ -40,7 +40,13 @@ const AdminNavItems = () => {
                         </DropdownToggle>
                         <DropdownMenu>
                             <Link href="/admin">
-                                <a className="dropdown-item">New Shipment</a>
+                                <a className="dropdown-item">New Package</a>
+                            </Link>
+                            <Link href="/admin/packages/shipping">
+                                <a className="dropdown-item">Shipping</a>
+                            </Link>
+                            <Link href="/admin/packages/receiving">
+                                <a className="dropdown-item">Receiving</a>
                             </Link>
                         </DropdownMenu>
                     </UncontrolledDropdown>

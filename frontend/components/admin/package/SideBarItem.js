@@ -18,8 +18,8 @@ const SideBarItem = ({ data, currency }) => {
             <Collapse isOpen={isOpen}>
                 <p>{data.tracking}</p>
                 <ul>
-                    { data.items.map((item, idx) => 
-                        <li key={idx}>
+                    { data.items.map(item => 
+                        <li key={item._id}>
                             {item.packaging} - {item.weight}{currency === 'NGN' ? 'kg' : 'lbs'}
                         </li> 
                     )}

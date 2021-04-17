@@ -19,7 +19,7 @@ const StyledContent = styled.div`
 
 const StyledMain = styled.div`
     background: var(--bgBlue);
-    min-height:75vh;
+    min-height:76vh;
     /* clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%); */
     /* color: var(--white); */
     align-items: center;
