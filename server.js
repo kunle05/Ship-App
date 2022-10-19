@@ -18,26 +18,28 @@ const Mutation = require('./server/src/resolvers/mutation');
 const app = express();
 app.use(cookieParser());
 
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
-}));
+  })
+);
 
 app.use((req, res, next) => {
-    const { token } = req.cookies;
-    if(token) {
-        const { userId } = jwt.verify(token, process.env.APP_SECRET);
-        req.userId = userId;
-    };
-    next();
-}); 
+  const { token } = req.cookies;
+  if (token) {
+    const { userId } = jwt.verify(token, process.env.APP_SECRET);
+    req.userId = userId;
+  }
+  next();
+});
 
 const server = new ApolloServer({
-    typeDefs,
-    resolvers: { Query, Mutation },
-    context: (req) => ({ ...req, Location, User, Package })
+  typeDefs,
+  resolvers: { Query, Mutation },
+  context: (req) => ({ ...req, Location, User, Package }),
 });
 
 server.applyMiddleware({ app, path: '/', cors: false });
 
-app.listen(7200, () => console.log("Running on 7200"));
+app.listen(7200, () => console.log('Running on 7200'));
